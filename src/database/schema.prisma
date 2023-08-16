@@ -9,3 +9,82 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Users {
+  user_id      Int      @id @default(autoincrement())
+  name         String @db.VarChar(100)
+  username     String @unique @db.VarChar(100)
+  email        String @unique @db.VarChar(100)
+  password     String @db.VarChar(100)
+  user_type    String @db.VarChar(48)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  administrators Administrator[]
+  customers    Customer[]
+  eventOrganizers EventOrganizer[]
+}
+
+model Administrator {
+  admin_id     Int      @id @default(autoincrement())
+  user_id      Int    @unique
+  user         Users     @relation(fields: [user_id], references: [user_id])
+}
+
+model Customer {
+  customer_id  Int      @id @default(autoincrement())
+  user_id      Int  @unique
+  user         Users     @relation(fields: [user_id], references: [user_id])
+  purchases    TicketPurchase[]
+}
+
+model EventOrganizer {
+  organizer_id Int      @id @default(autoincrement())
+  user_id      Int @unique
+  verified     Boolean  @default(false)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  user         Users     @relation(fields: [user_id], references: [user_id])
+  events       Event[]  
+}
+
+model Category {
+  category_id  Int      @id @default(autoincrement())
+  category_name String  @db.VarChar(50)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  events       Event[]  
+}
+
+model Event {
+  event_id     Int       @id @default(autoincrement())
+  title        String   @db.VarChar(100)
+  description  String? @db.VarChar(255)
+  event_date   DateTime 
+  location     String  @db.VarChar(100)
+  ticket_total Int @default(0)
+  category_id  Int 
+  organizer_id Int
+  verified     Boolean
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  category     Category  @relation(fields: [category_id], references: [category_id])
+  organizer    EventOrganizer @relation(fields: [organizer_id], references: [organizer_id])
+  tickets      Ticket[]
+}
+
+model TicketPurchase {
+  purchase_id  Int      @id @default(autoincrement())
+  customer_id  Int
+  ticket_id    Int
+  purchase_date DateTime @default(now())
+  customer     Customer @relation(fields: [customer_id], references: [customer_id])
+  ticket       Ticket   @relation(fields: [ticket_id], references: [ticket_id])
+}
+
+model Ticket {
+  ticket_id    Int      @id @default(autoincrement())
+  price        Int @default(0)
+  event_id     Int
+  event        Event    @relation(fields: [event_id], references: [event_id])
+  purchases    TicketPurchase[]
+}
