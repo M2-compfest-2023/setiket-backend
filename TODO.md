@@ -1,3 +1,6 @@
 # Backend To Do List
 
-[] Create docker compose
+## setup
+[x] Create docker compose
+[] Husky and prettier
+[] Readme
