@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { PrismaService } from "src/prisma.service";
-import { UsersService } from "../users.service";
-import { UserLoginDto } from "./dto/user-login.dto";
+import { PrismaService } from "@/providers/prisma";
+import { UsersService } from "@modules/users";
+import { UserLoginDto } from "./dtos/user-login.dto";
 import * as bcrypt from 'bcrypt';
-import { UserRegisterDto } from "./dto/user-register.dto";
+import { UserRegisterDto } from "./dtos/user-register.dto";
 
 @Injectable()
 export class AuthService {
