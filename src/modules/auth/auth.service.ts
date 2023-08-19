@@ -5,6 +5,7 @@ import { UsersService } from "@modules/users";
 import { UserLoginDto } from "./dtos/user-login.dto";
 import * as bcrypt from 'bcrypt';
 import { UserRegisterDto } from "./dtos/user-register.dto";
+import { UserType } from "@prisma/client";
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,7 @@ export class AuthService {
     }
 
     async register (registerDto: UserRegisterDto):Promise<any> {
-        const { name, username, password, email, user_type } = registerDto;
+        const { name, username, password, email } = registerDto;
 
         const user = await this.prismaservice.users.findUnique({
             where: {
@@ -59,7 +60,7 @@ export class AuthService {
                 username: username,
                 password: hashPassword,
                 email: email,
-                user_type: user_type
+                user_type: "CUSTOMER"
             }
         });
 

@@ -10,9 +10,9 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - 3306:3306
-    # expose:
-    #   - ${MYSQL_PORT}
+      - ${MYSQL_PORT}:3306
+    expose:
+      - ${MYSQL_PORT}
     volumes:
       - ./docker/volumes/:/var/lib/mysql
 
@@ -33,4 +33,3 @@ services:
       DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}
     depends_on:
       - db
-
