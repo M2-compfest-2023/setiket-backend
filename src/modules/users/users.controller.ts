@@ -1,13 +1,21 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request, Response } from 'express';
+import { Roles } from '@/common/decorators/roles.decorators';
+import { UserType } from '@prisma/client';
+import { RoleGuard } from '@/common/guards/roles/role.guard';
+import { JwtAuthGuard } from '@/common/guards/jwt';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
     @Get()
-    async getAllUsers(@Req() req:Request, @Res() res:Response):Promise<any> {
+    @Roles(UserType.ADMIN)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @ApiBearerAuth()
+    async getAllUsers(@Req() _:Request, @Res() res:Response):Promise<any> {
         try {
             const users = await this.usersService.getAllUsers();
             return res.status(200).json({

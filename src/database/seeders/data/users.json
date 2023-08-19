@@ -1,0 +1,26 @@
+[
+  {
+    "id" : 1,
+    "name" : "Testing Customer",
+    "username" : "testingcustomer",
+    "email" : "testcustomer@gmail.com",
+    "password" : "password",
+    "user_type" : "CUSTOMER"
+  },
+  {
+    "id" : 2,
+    "name" : "Testing EO",
+    "username" : "testingeo",
+    "email" : "testeo@gmail.com",
+    "password" : "password",
+    "user_type" : "EVENTORGANIZER"
+  },
+  {
+    "id" : 3,
+    "name" : "Testing Admin",
+    "username" : "testingadmin",
+    "email" : "testadmin@gmail.com",
+    "password" : "password",
+    "user_type" : "ADMIN"
+  }
+]
