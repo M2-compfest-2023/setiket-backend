@@ -10,7 +10,7 @@ import { UserType } from "@prisma/client";
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly prismaservice: PrismaService,
+        private readonly prismaService: PrismaService,
         private jwtService: JwtService,
         private readonly userService: UsersService
     ) { }
@@ -18,7 +18,7 @@ export class AuthService {
     async login (loginDto: UserLoginDto):Promise<any> {
         const { username, password } = loginDto;
 
-        const user = await this.prismaservice.users.findUnique({
+        const user = await this.prismaService.users.findUnique({
             where: {
                 username: username
             }
@@ -44,15 +44,69 @@ export class AuthService {
 
         const user = await this.prismaservice.users.findUnique({
             where: {
-                username: username
-            }
+              username: username,
+            },
+          });
+    
+          if (user) {
+            throw new NotFoundException('User already exists');
+          }
+    
+          newUser = await prisma.users.create({
+            data: {
+              name: name,
+              username: username,
+              password: hashPassword,
+              email: email,
+              user_type: user_type,
+            },
+          });
+    
+          if (!newUser) {
+            throw new NotFoundException('Failed to create user');
+          }
+    
+          switch (user_type) {
+            case 'event_organizer':
+              await prisma.eventOrganizer.create({
+                data: {
+                    user_id: newUser.user_id,
+                    verified: false
+                },
+              });
+              break;
+            case 'customer':
+              await prisma.customer.create({
+                data: {
+                    user_id: newUser.user_id
+                },
+              });
+              break;
+            case 'admin':
+              await prisma.administrator.create({
+                data: {
+                    user_id: newUser.user_id
+                },
+              });
+              break;
+            default:
+              break;
+          }
         });
+    
+        return {
+          access_token: this.jwtService.sign({ username: newUser.username }),
+        };
+      }
 
-        if (user) {
-            throw new NotFoundException("User already exists");
-        }
+    // async register (registerDto: UserRegisterDto):Promise<any> {
+    //     const { name, username, password, email, user_type } = registerDto;
 
-        const hashPassword = await bcrypt.hash(password, 10);
+    //     const user = await this.prismaservice.users.findUnique({
+    //         where: {
+    //             username: username
+    //         }
+    //     });
 
         const newUser = await this.prismaservice.users.create({
             data: {
@@ -64,8 +118,53 @@ export class AuthService {
             }
         });
 
-        return {
-            access_token: this.jwtService.sign({ username: newUser.username })
-        }
-    }
+    //     const hashPassword = await bcrypt.hash(password, 10);
+
+        
+
+    //     const newUser = await this.prismaservice.users.create({
+    //         data: {
+    //             name: name,
+    //             username: username,
+    //             password: hashPassword,
+    //             email: email,
+    //             user_type: user_type
+    //         }
+    //     });
+
+    //     if (!newUser) {
+    //         throw new NotFoundException("Failed to create user");
+    //     }
+
+    //     switch (user_type) {
+    //         case "event_organizer":
+    //             await this.prismaservice.eventOrganizer.create({
+    //                 data: {
+    //                     user_id: newUser.user_id,
+    //                     verified: false
+    //                 }
+    //             });
+    //             break;
+    //         case "customer":
+    //             await this.prismaservice.customer.create({
+    //                 data: {
+    //                     user_id: newUser.user_id
+    //                 }
+    //             });
+    //             break;
+    //         case "admin":
+    //             await this.prismaservice.administrator.create({
+    //                 data: {
+    //                     user_id: newUser.user_id
+    //                 }
+    //             });
+    //             break;
+    //         default:
+    //             break;
+    //     }
+
+    //     return {
+    //         access_token: this.jwtService.sign({ username: newUser.username })
+    //     }
+    // }
 }
