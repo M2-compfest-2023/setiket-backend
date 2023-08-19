@@ -10,9 +10,9 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - 3306:3306
-    # expose:
-    #   - ${MYSQL_PORT}
+      - ${MYSQL_PORT}:3306
+    expose:
+      - ${MYSQL_PORT}
     volumes:
       - ./docker/volumes/:/var/lib/mysql
 
@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - ${BACKEND_PORT}:${BACKEND_PORT}
     volumes:
       - ./src:/home/node/app/src
     working_dir: /home/node/app/
@@ -33,4 +33,3 @@ services:
       DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}
     depends_on:
       - db
-

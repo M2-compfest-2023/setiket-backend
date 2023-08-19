@@ -5,7 +5,8 @@ import { UsersService } from "@modules/users";
 import { UserLoginDto } from "./dtos/user-login.dto";
 import * as bcrypt from 'bcrypt';
 import { UserRegisterDto } from "./dtos/user-register.dto";
-import { Prisma } from "@prisma/client";
+import { UserType } from "@prisma/client";
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -38,16 +39,10 @@ export class AuthService {
         }
     }
 
-    async register(registerDto: UserRegisterDto): Promise<any> {
-        const { name, username, password, email, user_type } = registerDto;
-    
-        const hashPassword = await bcrypt.hash(password, 10);
-    
-        let newUser;
-    
-        // Define a transaction block
-        const result = await this.prismaService.$transaction(async (prisma) => {
-          const user = await prisma.users.findUnique({
+    async register (registerDto: UserRegisterDto):Promise<any> {
+        const { name, username, password, email } = registerDto;
+
+        const user = await this.prismaservice.users.findUnique({
             where: {
               username: username,
             },
@@ -113,9 +108,15 @@ export class AuthService {
     //         }
     //     });
 
-    //     if (user) {
-    //         throw new NotFoundException("User already exists");
-    //     }
+        const newUser = await this.prismaservice.users.create({
+            data: {
+                name: name,
+                username: username,
+                password: hashPassword,
+                email: email,
+                user_type: "CUSTOMER"
+            }
+        });
 
     //     const hashPassword = await bcrypt.hash(password, 10);
 
