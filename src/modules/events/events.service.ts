@@ -29,13 +29,13 @@ export class EventService {
     }
 
     async updateEvent(eventId: number, eventData: UpdateEventDto): Promise<Event> {
-        const existingEvent = await this.prisma.event.findUnique({ where: { event_id: eventId } });
+        const existingEvent = await this.prisma.event.findUnique({ where: { id: eventId } });
         if (!existingEvent) {
           throw new NotFoundException(`Event with ID ${eventId} not found`);
         }
     
         const updatedEvent = await this.prisma.event.update({
-          where: { event_id: eventId },
+          where: { id: eventId },
           data: eventData,
         });
     
@@ -43,13 +43,13 @@ export class EventService {
     }
 
     async deleteEvent(eventId: number): Promise<Event> {
-        const existingEvent = await this.prisma.event.findUnique({ where: { event_id: eventId } });
+        const existingEvent = await this.prisma.event.findUnique({ where: { id: eventId } });
         if (!existingEvent) {
           throw new NotFoundException(`Event with ID ${eventId} not found`);
         }
     
         const deletedEvent = await this.prisma.event.delete({
-          where: { event_id: eventId },
+          where: { id: eventId },
         });
     
         return deletedEvent;

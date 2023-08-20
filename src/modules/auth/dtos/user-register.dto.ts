@@ -15,5 +15,4 @@ export class UserRegisterDto {
 
     @IsEmail()
     email: string;
-
 }
