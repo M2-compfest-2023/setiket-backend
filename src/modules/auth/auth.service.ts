@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '@/providers/prisma';
 import { UsersService } from '@modules/users';
 import { UserLoginDto } from './dtos/user-login.dto';
 import * as bcrypt from 'bcrypt';
 import { UserRegisterDto } from './dtos/user-register.dto';
-import { Prisma } from '@prisma/client';
+import { CustomException } from '@/response/CustomException';
 
 @Injectable()
 export class AuthService {
@@ -25,13 +25,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new CustomException('User not found', HttpStatus.NOT_FOUND);
     }
 
     const validatePassword = await bcrypt.compare(password, user.password);
 
     if (!validatePassword) {
-      throw new NotFoundException('Wrong password');
+      throw new CustomException('Wrong password', HttpStatus.NOT_FOUND);
     }
 
     return {
@@ -49,7 +49,7 @@ export class AuthService {
     });
 
     if (user) {
-      throw new NotFoundException('User already exists');
+      throw new CustomException('User already exists', HttpStatus.NOT_FOUND);
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -65,7 +65,7 @@ export class AuthService {
     });
 
     if (!newUser) {
-      throw new NotFoundException('Failed to create user');
+      throw new CustomException('Failed to create user', HttpStatus.NOT_FOUND);
     }
 
     return {
