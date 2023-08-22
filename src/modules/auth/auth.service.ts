@@ -1,11 +1,10 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '@/providers/prisma';
 import { UserLoginDto } from './dtos/login.dto';
 import { UserRegisterDto } from './dtos/register.dto';
 import { EoRegisterDto } from './dtos/register.dto';
 import { comparePassword, hashPassword } from '@/common/helpers/hash.helper';
-import { CustomException } from '@/response/CustomException';
 
 @Injectable()
 export class AuthService {
@@ -14,23 +13,23 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(loginDto: UserLoginDto): Promise<any> {
+  async login(loginDto: UserLoginDto) {
     const { email, password } = loginDto;
 
     const user = await this.prismaService.users.findUnique({
       where: {
-        username: email,
+        email: email,
       },
     });
 
     if (!user) {
-      throw new CustomException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
 
     const validatePassword = await comparePassword(password, user.password);
 
     if (!validatePassword) {
-      throw new CustomException('Wrong password', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Wrong password');
     }
 
     return {
