@@ -1,11 +1,12 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpCode, InternalServerErrorException, Req, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { Request, Response } from 'express';
-import { Roles } from '@/common/decorators/roles.decorators';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { UserType } from '@prisma/client';
 import { RoleGuard } from '@/common/guards/roles/role.guard';
 import { JwtAuthGuard } from '@/common/guards/jwt';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ResponseMessage } from '@/common/decorators/responseMessage.decorator';
+import { CustomException } from '@/response/CustomException';
 
 @Controller('users')
 @ApiTags("Users")
@@ -16,17 +17,16 @@ export class UsersController {
     @Roles(UserType.ADMIN)
     @UseGuards(JwtAuthGuard, RoleGuard)
     @ApiBearerAuth()
-    async getAllUsers(@Req() _:Request, @Res() res:Response):Promise<any> {
-        try {
-            const users = await this.usersService.getAllUsers();
-            return res.status(200).json({
-                data: users
-            });
-        } catch (error) {
-            return res.status(404).json({
-                message: "Users not found",
-                error: error.message
-            });
-        }
+    @HttpCode(200)
+    @ResponseMessage('Success get all users')
+    async getAllUsers() {
+      try {
+        const users = await this.usersService.getAllUsers();
+        console.log(users)
+        return users
+      } catch (error) {
+        if (error.status) throw new CustomException(error.message, error.status);
+        else throw new InternalServerErrorException(error);
+      }
     }
 }
