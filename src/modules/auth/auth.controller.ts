@@ -30,39 +30,24 @@ export class AuthController {
   @HttpCode(200)
   @ResponseMessage('Success login')
   async login(@Body() loginDto: UserLoginDto) {
-    try {
-      const login = await this.authService.login(loginDto);
-      return login;
-    } catch (error) {
-      if (error.status) throw new CustomException(error.message, error.status);
-      else throw new InternalServerErrorException(error);
-    }
+    const login = await this.authService.login(loginDto);
+    return login;
   }
 
   @Post('register/customer')
   @HttpCode(201)
   @ResponseMessage('Success create new customer')
   async registerCustomer(@Body() registerDto: UserRegisterDto) {
-    try {
-      const register = await this.authService.registerCustomer(registerDto);
-      return register;
-    } catch (error) {
-      if (error.status) throw new CustomException(error.message, error.status);
-      else throw new InternalServerErrorException(error);
-    }
+    const register = await this.authService.registerCustomer(registerDto);
+    return register;
   }
 
   @Post('register/eo')
   @HttpCode(201)
   @ResponseMessage('Success create new event organizer')
   async registerEo(@Body() registerDto: EoRegisterDto) {
-    try {
-      const register = await this.authService.registerEo(registerDto);
-      return register;
-    } catch (error) {
-      if (error.status) throw new CustomException(error.message, error.status);
-      else throw new InternalServerErrorException(error);
-    }
+    const register = await this.authService.registerEo(registerDto);
+    return register;
   }
 
   @Post('me')
@@ -71,16 +56,11 @@ export class AuthController {
   @HttpCode(200)
   @ResponseMessage('Token valid')
   async validateToken(@Token('id') id: string, @Res() res: Response) {
-    try {
-      const user = await this.prismaService.users.findUnique({
-        where: {
-          id,
-        },
-      });
-      return user
-    } catch (error) {
-      if (error.status) throw new CustomException(error.message, error.status);
-      else throw new InternalServerErrorException(error);
-    }
+    const user = await this.prismaService.users.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user;
   }
 }

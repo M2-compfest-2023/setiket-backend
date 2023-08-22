@@ -26,6 +26,7 @@ export class ResponseInterceptor<T>
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => ({
+        success: true,
         status: context.switchToHttp().getResponse().statusCode,
         message:
           this.reflector.get<string>(

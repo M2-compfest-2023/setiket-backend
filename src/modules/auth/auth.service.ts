@@ -5,6 +5,7 @@ import { UserLoginDto } from './dtos/login.dto';
 import { UserRegisterDto } from './dtos/register.dto';
 import { EoRegisterDto } from './dtos/register.dto';
 import { comparePassword, hashPassword } from '@/common/helpers/hash.helper';
+import { CustomException } from '@/response/CustomException';
 
 @Injectable()
 export class AuthService {
@@ -23,13 +24,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new CustomException('Email/password not valid', 400);
     }
 
     const validatePassword = await comparePassword(password, user.password);
 
     if (!validatePassword) {
-      throw new NotFoundException('Wrong password');
+      throw new CustomException('Email/password not valid', 400);
     }
 
     return {
