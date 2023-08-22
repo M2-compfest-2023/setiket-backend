@@ -4,8 +4,9 @@ import { AppService } from './app.service';
 import { UsersModule } from '@/modules/users';
 import { AuthModule } from '@/modules/auth';
 import { EventModule } from '@/modules/events';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from '@/common/interceptors/response.interceptor';
+import { AllExceptionsFilter } from '@/common/filters/exception.filter';
 
 @Module({
   imports: [UsersModule, AuthModule, EventModule],
@@ -15,6 +16,10 @@ import { ResponseInterceptor } from '@/common/interceptors/response.interceptor'
     {
       provide : APP_INTERCEPTOR,
       useClass : ResponseInterceptor
+    },
+    {
+      provide : APP_FILTER,
+      useClass : AllExceptionsFilter
     }
   ],
 })

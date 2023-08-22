@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, InternalServerErrorException, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpCode, InternalServerErrorException, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { UserType } from '@prisma/client';
@@ -22,7 +22,6 @@ export class UsersController {
     async getAllUsers() {
       try {
         const users = await this.usersService.getAllUsers();
-        console.log(users)
         return users
       } catch (error) {
         if (error.status) throw new CustomException(error.message, error.status);
