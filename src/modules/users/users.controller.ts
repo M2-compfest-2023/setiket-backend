@@ -5,9 +5,10 @@ import { Roles } from '@/common/decorators/roles.decorators';
 import { UserType } from '@prisma/client';
 import { RoleGuard } from '@/common/guards/roles/role.guard';
 import { JwtAuthGuard } from '@/common/guards/jwt';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags("Users")
 export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
