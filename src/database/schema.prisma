@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Users {
-  id              Int              @id @default(autoincrement())
+  id              String           @id @default(uuid())
   name            String           @db.VarChar(100)
   username        String           @unique @db.VarChar(100)
   email           String           @unique @db.VarChar(100)
@@ -19,33 +19,37 @@ model Users {
   user_type       UserType
   created_at      DateTime         @default(now())
   updated_at      DateTime         @updatedAt
+
   administrators  Administrator[]
   customers       Customer[]
   eventOrganizers EventOrganizer[]
 }
 
 model Administrator {
-  id      Int   @id @default(autoincrement())
-  user_id Int   @unique
-  user    Users @relation(fields: [user_id], references: [id])
+  id      Int    @id @default(autoincrement())
+  user_id String @unique
+
+  user    Users  @relation(fields: [user_id], references: [id])
 }
 
 model Customer {
   id        Int              @id @default(autoincrement())
-  user_id   Int              @unique
-  user      Users            @relation(fields: [user_id], references: [id])
+  user_id   String           @unique
   purchases TicketPurchase[]
+
+  user      Users            @relation(fields: [user_id], references: [id])
 }
 
 model EventOrganizer {
   id                Int      @id @default(autoincrement())
-  user_id           Int      @unique
+  user_id           String   @unique
   organization_name String
   verified          Boolean  @default(false)
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
-  user              Users    @relation(fields: [user_id], references: [id])
   events            Event[]
+
+  user              Users    @relation(fields: [user_id], references: [id])
 }
 
 model Category {
@@ -68,9 +72,10 @@ model Event {
   verified     Boolean
   created_at   DateTime       @default(now())
   updated_at   DateTime       @updatedAt
-  category     Category       @relation(fields: [category_id], references: [id])
-  organizer    EventOrganizer @relation(fields: [organizer_id], references: [id])
   tickets      Ticket[]
+
+  organizer    EventOrganizer @relation(fields: [organizer_id], references: [id])
+  category     Category       @relation(fields: [category_id], references: [id])
 }
 
 model TicketPurchase {
@@ -78,6 +83,7 @@ model TicketPurchase {
   customer_id   Int
   ticket_id     Int
   purchase_date DateTime @default(now())
+
   customer      Customer @relation(fields: [customer_id], references: [id])
   ticket        Ticket   @relation(fields: [ticket_id], references: [id])
 }
@@ -86,8 +92,9 @@ model Ticket {
   id        Int              @id @default(autoincrement())
   price     Int              @default(0)
   event_id  Int
-  event     Event            @relation(fields: [event_id], references: [id])
   purchases TicketPurchase[]
+
+  event     Event            @relation(fields: [event_id], references: [id])
 }
 
 enum UserType {

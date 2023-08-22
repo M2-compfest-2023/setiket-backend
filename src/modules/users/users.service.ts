@@ -1,12 +1,12 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { PrismaService } from '@/providers/prisma';
-import { Users } from './users.model';
+import { Injectable } from '@nestjs/common'
+import { PrismaService } from '@/providers/prisma'
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
-  async getAllUsers(): Promise<Users[]> {
-    return await this.prisma.users.findMany();
+  async getAllUsers() {
+    return await this.prismaService.users.findMany()
   }
+
 }

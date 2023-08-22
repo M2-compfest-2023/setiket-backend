@@ -1,6 +1,6 @@
 import { PrismaClient, UserType } from "@prisma/client";
 import userData from "./data/users.json"
-import * as bcrypt from 'bcrypt';
+import { hashPassword } from "@/common/helpers/hash.helper";
 
 const prisma = new PrismaClient();
 
@@ -11,7 +11,7 @@ export default async function usersSeeder () {
       name : user.name,
       username : user.username,
       email : user.email,
-      password : await bcrypt.hash(user.password, 10),
+      password : await hashPassword(user.password),
       user_type : user.user_type == "ADMIN" ? UserType.ADMIN : user.user_type == "CUSTOMER" ? UserType.CUSTOMER : UserType.EVENTORGANIZER
     }
 

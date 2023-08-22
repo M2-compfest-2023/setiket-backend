@@ -3,15 +3,15 @@ import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/com
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-    canActivate(context: ExecutionContext) {
-        return super.canActivate(context);
+  canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
+  }
+
+  handleRequest(err, user, _) {
+    if (err || !user) {
+      throw err || new UnauthorizedException();
     }
 
-    handleRequest(err, user, info) {
-        if (err || !user) {
-            throw err || new UnauthorizedException();
-        }
-
-        return user;
-    }
+    return user;
+  }
 }
