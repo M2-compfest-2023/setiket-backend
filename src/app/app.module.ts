@@ -7,9 +7,9 @@ import { EventModule } from '@/modules/events';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from '@/common/interceptors/response.interceptor';
 import { AllExceptionsFilter } from '@/common/filters/exception.filter';
-
+import { CategoriesModule } from '@/modules/categories';
 @Module({
-  imports: [UsersModule, AuthModule, EventModule],
+  imports: [UsersModule, AuthModule, EventModule, CategoriesModule],
   controllers: [AppController],
   providers: [
     AppService,
@@ -23,5 +23,4 @@ import { AllExceptionsFilter } from '@/common/filters/exception.filter';
     }
   ],
 })
-
 export class AppModule {}

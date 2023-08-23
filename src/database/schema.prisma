@@ -64,12 +64,12 @@ model Event {
   id           Int            @id @default(autoincrement())
   title        String         @db.VarChar(100)
   description  String?        @db.VarChar(255)
-  event_date   DateTime
+  event_date   DateTime 
   location     String         @db.VarChar(100)
   ticket_total Int            @default(0)
   category_id  Int
   organizer_id Int
-  verified     Boolean
+  verified     Boolean 
   created_at   DateTime       @default(now())
   updated_at   DateTime       @updatedAt
   tickets      Ticket[]
