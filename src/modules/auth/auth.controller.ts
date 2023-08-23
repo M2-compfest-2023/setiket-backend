@@ -3,19 +3,15 @@ import {
   Controller,
   Post,
   Body,
-  Res,
   UseGuards,
-  InternalServerErrorException,
   HttpCode,
 } from '@nestjs/common';
 import { UserLoginDto } from './dtos/login.dto';
-import { Response } from 'express';
 import { EoRegisterDto, UserRegisterDto } from './dtos/register.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/common/guards/jwt';
 import { Token } from '@/common/decorators/token.decorator';
 import { PrismaService } from '@/providers/prisma';
-import { CustomException } from '@/response/CustomException';
 import { ResponseMessage } from '@/common/decorators/responseMessage.decorator';
 
 @Controller('auth')

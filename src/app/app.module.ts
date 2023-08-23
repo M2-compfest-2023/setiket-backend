@@ -7,9 +7,10 @@ import { EventModule } from '@/modules/events';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from '@/common/interceptors/response.interceptor';
 import { AllExceptionsFilter } from '@/common/filters/exception.filter';
+import { LocationModule } from '@/modules/location/location.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, EventModule],
+  imports: [UsersModule, AuthModule, EventModule, LocationModule],
   controllers: [AppController],
   providers: [
     AppService,
