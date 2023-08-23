@@ -1,5 +1,11 @@
 // src/events/dto/update-event.dto.ts
-import { IsOptional, IsString, IsBoolean, IsInt, IsDateString } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsBoolean,
+  IsInt,
+  IsDateString,
+} from 'class-validator';
 
 export class UpdateEventDto {
   @IsOptional()
@@ -12,7 +18,11 @@ export class UpdateEventDto {
 
   @IsOptional()
   @IsDateString()
-  event_date?: Date;
+  start_date?: Date;
+
+  @IsOptional()
+  @IsDateString()
+  end_date?: Date;
 
   @IsOptional()
   @IsString()
@@ -26,7 +36,7 @@ export class UpdateEventDto {
   @IsInt()
   category_id?: number;
 
-  @IsOptional()
-  @IsBoolean()
-  verified?: boolean;
+  // @IsOptional()
+  // @IsBoolean()
+  // verified?: boolean;
 }

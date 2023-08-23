@@ -1,0 +1,7 @@
+[
+  { "id": 1, "category_name": "Concerts" },
+  { "id": 2, "category_name": "Conferences" },
+  { "id": 3, "category_name": "Workshops" },
+  { "id": 4, "category_name": "Exhibitions" },
+  { "id": 5, "category_name": "Sports" }
+]

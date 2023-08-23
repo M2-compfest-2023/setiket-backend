@@ -4,9 +4,9 @@ import { hashPassword } from "@/common/helpers/hash.helper";
 
 const prisma = new PrismaClient();
 
-export default async function usersSeeder () {
-  for(let idx in userData) {
-    const user = userData[idx]
+export default async function usersSeeder() {
+  for (const idx in userData) {
+    const user = userData[idx];
     const userUpsert = {
       name : user.name,
       username : user.username,
@@ -16,11 +16,11 @@ export default async function usersSeeder () {
     }
 
     await prisma.users.upsert({
-      where : {
-        id : user.id
+      where: {
+        id: user.id,
       },
-      update : userUpsert,
-      create : userUpsert
-    })
+      update: userUpsert,
+      create: userUpsert,
+    });
   }
 }
