@@ -1,5 +1,11 @@
 // src/events/dto/update-event.dto.ts
-import { IsOptional, IsString, IsBoolean, IsInt, IsDateString } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsBoolean,
+  IsInt,
+  IsDateString,
+} from 'class-validator';
 
 export class UpdateEventDto {
   @IsOptional()
