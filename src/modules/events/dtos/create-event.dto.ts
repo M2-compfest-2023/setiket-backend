@@ -27,7 +27,14 @@ export class CreateEventDto {
   })
   @IsNotEmpty()
   @IsDateString()
-  event_date: Date;
+  start_date: Date;
+
+  @ApiProperty({
+    // example: '2021-01-01T00:00:00.000Z',
+  })
+  @IsNotEmpty()
+  @IsDateString()
+  end_date: Date;
 
   @ApiProperty({
     example: 'Event Location',
