@@ -55,12 +55,18 @@ export class AuthController {
   @ApiBearerAuth()
   @HttpCode(200)
   @ResponseMessage('Token valid')
-  async validateToken(@Token('id') id: string, @Res() res: Response) {
+  async validateToken(@Token('id') id: string) {
     const user = await this.prismaService.users.findUnique({
       where: {
         id,
       },
     });
-    return user;
+
+    const { username, user_type } = user;
+    return {
+      username,
+      id,
+      role: user_type,
+    };
   }
 }
