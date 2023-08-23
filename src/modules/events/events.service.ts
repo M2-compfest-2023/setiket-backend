@@ -4,7 +4,6 @@ import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
 import { Event } from '@prisma/client';
 import { NotFoundException } from '@nestjs/common';
-// import { ApproveEventDto } from './dtos/approve-event.dto';
 import { ApproveEventDto } from './dtos/approve-event.dto';
 
 @Injectable()
@@ -32,7 +31,8 @@ export class EventService {
     const {
       title,
       description,
-      event_date,
+      start_date,
+      end_date,
       location,
       ticket_total,
       category_id,
@@ -43,7 +43,8 @@ export class EventService {
       data: {
         title,
         description,
-        event_date: new Date(event_date),
+        start_date: new Date(start_date),
+        end_date: new Date(end_date),
         location,
         ticket_total,
         category_id,
@@ -109,7 +110,7 @@ export class EventService {
           { location: { contains: province } },
           { location: { contains: city } },
           { category: { category_name: { contains: category } } },
-          { event_date: new Date(date) },
+          { start_date: new Date(date) },
         ],
       },
     });
