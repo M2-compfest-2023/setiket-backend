@@ -1,6 +1,6 @@
 import { PrismaClient, UserType } from "@prisma/client";
 import userData from "./data/users.json"
-import { hashPassword } from "@/common/helpers/hash.helper";
+import { hashPassword } from "../../common/helpers/hash.helper";
 
 const prisma = new PrismaClient();
 
@@ -8,6 +8,7 @@ export default async function usersSeeder() {
   for (const idx in userData) {
     const user = userData[idx];
     const userUpsert = {
+      id: user.id,
       name : user.name,
       username : user.username,
       email : user.email,

@@ -8,8 +8,10 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from '@/common/interceptors/response.interceptor';
 import { AllExceptionsFilter } from '@/common/filters/exception.filter';
 import { CategoriesModule } from '@/modules/categories';
+import { LocationModule } from '@/modules/location/location.module';
+
 @Module({
-  imports: [UsersModule, AuthModule, EventModule, CategoriesModule],
+  imports: [UsersModule, AuthModule, EventModule, LocationModule, CategoriesModule],
   controllers: [AppController],
   providers: [
     AppService,
