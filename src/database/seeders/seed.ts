@@ -1,11 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import usersSeeder from "./users.seeder";
 import { citySeeder } from "./city.seeder";
+import { provinceSeeder } from "./province.seeder";
 
 const prisma = new PrismaClient();
 
 async function main() {
   await usersSeeder()
+  await provinceSeeder()
   await citySeeder()
 }
 
