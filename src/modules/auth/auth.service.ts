@@ -34,7 +34,7 @@ export class AuthService {
     }
 
     return {
-      access_token: this.jwtService.sign({ username: user.username }),
+      access_token: this.jwtService.sign({ username: user.username, id: user.id }),
     };
   }
 
@@ -64,7 +64,7 @@ export class AuthService {
     });
 
     return {
-      access_token: this.jwtService.sign({ username: newUser.username }),
+      access_token: this.jwtService.sign({ username: newUser.username, id: newUser.id }),
     };
   }
 
@@ -99,7 +99,7 @@ export class AuthService {
     });
 
     return {
-      access_token: this.jwtService.sign({ username: newUser.username }),
+      access_token: this.jwtService.sign({ username: newUser.username, id: newUser.id }),
     };
   }
 }
