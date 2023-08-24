@@ -33,9 +33,9 @@ model Administrator {
 }
 
 model Customer {
-  id        Int              @id @default(autoincrement())
-  user_id   String           @unique
-  purchases TicketPurchase[]
+  id      Int      @id @default(autoincrement())
+  user_id String   @unique
+  ticket  Ticket[]
 
   user Users @relation(fields: [user_id], references: [id])
 }
@@ -71,33 +71,24 @@ model Event {
   category_id  Int
   organizer_id Int
   verified     Boolean
-  city_id    Int
+  city_id      Int
   updated_at   DateTime @updatedAt
+  price        Int      @default(0)
   created_at   DateTime @default(now())
   tickets      Ticket[]
 
-  city         City     @relation(fields: [city_id], references: [id])
+  city      City           @relation(fields: [city_id], references: [id])
   organizer EventOrganizer @relation(fields: [organizer_id], references: [id])
   category  Category       @relation(fields: [category_id], references: [id])
 }
 
-model TicketPurchase {
-  id            Int      @id @default(autoincrement())
-  customer_id   Int
-  ticket_id     Int
-  purchase_date DateTime @default(now())
-
-  customer Customer @relation(fields: [customer_id], references: [id])
-  ticket   Ticket   @relation(fields: [ticket_id], references: [id])
-}
-
 model Ticket {
-  id        Int              @id @default(autoincrement())
-  price     Int              @default(0)
-  event_id  Int
-  purchases TicketPurchase[]
-
-  event Event @relation(fields: [event_id], references: [id])
+  id          Int      @id @default(autoincrement())
+  quantity    Int
+  event_id    Int
+  customer_id Int
+  event       Event    @relation(fields: [event_id], references: [id])
+  customer    Customer @relation(fields: [customer_id], references: [id])
 }
 
 model Province {
