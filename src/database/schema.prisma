@@ -61,20 +61,22 @@ model Category {
 }
 
 model Event {
-  id           Int            @id @default(autoincrement())
-  title        String         @db.VarChar(100)
-  description  String?        @db.VarChar(255)
+  id           Int      @id @default(autoincrement())
+  title        String   @db.VarChar(100)
+  description  String?  @db.VarChar(255)
   start_date   DateTime
-  end_date     DateTime 
-  location     String         @db.VarChar(100)
-  ticket_total Int            @default(0)
+  end_date     DateTime
+  ticket_total Int      @default(0)
+  location     String
   category_id  Int
   organizer_id Int
-  verified     Boolean 
-  created_at   DateTime       @default(now())
-  updated_at   DateTime       @updatedAt
+  verified     Boolean
+  city_id    Int
+  updated_at   DateTime @updatedAt
+  created_at   DateTime @default(now())
   tickets      Ticket[]
 
+  city         City     @relation(fields: [city_id], references: [id])
   organizer EventOrganizer @relation(fields: [organizer_id], references: [id])
   category  Category       @relation(fields: [category_id], references: [id])
 }
@@ -113,6 +115,7 @@ model City {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   Province    Province @relation(fields: [province_id], references: [id])
+  event       Event[]
 }
 
 enum UserType {

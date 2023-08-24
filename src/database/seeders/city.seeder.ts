@@ -23,5 +23,6 @@ export const citySeeder = async () => {
           create: cityData,
         });
       }
+      console.log('City seeded successfully');
     });
 };

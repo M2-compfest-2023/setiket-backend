@@ -5,7 +5,8 @@
     "username" : "testingcustomer",
     "email" : "testcustomer@gmail.com",
     "password" : "password",
-    "user_type" : "CUSTOMER"
+    "user_type" : "CUSTOMER",
+    "custid" : 1
   },
   {
     "id" : "ajdfoasdfoaiheiweorwejorwjerjwie",
@@ -13,7 +14,9 @@
     "username" : "testingeo",
     "email" : "testeo@gmail.com",
     "password" : "password",
-    "user_type" : "EVENTORGANIZER"
+    "organization_name" : "Testing Name EO",
+    "user_type" : "EVENTORGANIZER",
+    "eoid" : 1
   },
   {
     "id" : "aokaodotjrnjykrtjynxoojiwejrwooo",
@@ -21,6 +24,7 @@
     "username" : "testingadmin",
     "email" : "testadmin@gmail.com",
     "password" : "password",
-    "user_type" : "ADMIN"
+    "user_type" : "ADMIN",
+    "adminid" : 1
   }
 ]

@@ -22,5 +22,6 @@ export const provinceSeeder = async () => {
           create: provData,
         });
       }
+      console.log('Province seeded successfully');
     });
 };
