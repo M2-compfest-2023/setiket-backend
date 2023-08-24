@@ -6,12 +6,14 @@ import { UserRegisterDto } from './dtos/register.dto';
 import { EoRegisterDto } from './dtos/register.dto';
 import { comparePassword, hashPassword } from '@/common/helpers/hash.helper';
 import { CustomException } from '@/common/response/CustomException';
+import { MailingService } from '@/providers/mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private jwtService: JwtService,
+    private mailService : MailingService
   ) {}
 
   async login(loginDto: UserLoginDto) {
@@ -83,6 +85,7 @@ export class AuthService {
 
     const hashedPassword = await hashPassword(password);
 
+
     const newUser = await this.prismaService.users.create({
       data: {
         username,
@@ -97,6 +100,14 @@ export class AuthService {
         },
       },
     });
+
+    const admin = await this.prismaService.administrator.findFirst({
+      include : {
+        user : true
+      }
+    })
+
+    if(admin) await this.mailService.newEventOrganizer(newUser.name, admin.user.email)
 
     return {
       access_token: this.jwtService.sign({ username: newUser.username, id: newUser.id }),

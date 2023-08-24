@@ -11,20 +11,51 @@ import { CategoriesModule } from '@/modules/categories';
 import { LocationModule } from '@/modules/location/location.module';
 import { NotifyModule } from '@/modules/notify/notify.module';
 import { TicketsModule } from '@/modules/tickets/tickets.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import path from 'path';
 
 @Module({
-  imports: [UsersModule, AuthModule, EventModule, LocationModule, CategoriesModule, NotifyModule, TicketsModule],
+  imports: [
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        pool: true,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASS,
+        },
+      },
+      template: {
+        dir: path.resolve(__dirname + '../../templates'),
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),
+
+    UsersModule,
+    AuthModule,
+    EventModule,
+    LocationModule,
+    CategoriesModule,
+    NotifyModule,
+    TicketsModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
     {
-      provide : APP_INTERCEPTOR,
-      useClass : ResponseInterceptor
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
     },
     {
-      provide : APP_FILTER,
-      useClass : AllExceptionsFilter
-    }
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
   ],
 })
 export class AppModule {}
