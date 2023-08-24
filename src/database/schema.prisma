@@ -72,9 +72,9 @@ model Event {
   organizer_id Int
   verified     Boolean
   city_id      Int
-  updated_at   DateTime @updatedAt
   price        Int      @default(0)
   created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
   tickets      Ticket[]
 
   city      City           @relation(fields: [city_id], references: [id])
@@ -87,6 +87,8 @@ model Ticket {
   quantity    Int
   event_id    Int
   customer_id Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
   event       Event    @relation(fields: [event_id], references: [id])
   customer    Customer @relation(fields: [customer_id], references: [id])
 }
