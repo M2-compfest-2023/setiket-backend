@@ -7,6 +7,7 @@
     "end_date": "2023-09-15T23:00:00Z",
     "location": "Concert Venue 1",
     "city_id" : 1101,
+    "price": 10000,
     "ticket_total": 500,
     "category_id": 1,
     "organizer_id": 1,
@@ -21,8 +22,9 @@
     "location": "Conference Center 1",
     "ticket_total": 200,
     "city_id" : 1101,
+    "price": 5000,
     "category_id": 2,
-    "organizer_id": 2,
+    "organizer_id": 1,
     "verified": false
   },
   {
@@ -34,8 +36,9 @@
     "location": "Workshop Venue 1",
     "ticket_total": 100,
     "city_id" : 1101,
+    "price": 25000,
     "category_id": 3,
-    "organizer_id": 3,
+    "organizer_id": 1,
     "verified": false
   },
   {
@@ -47,8 +50,9 @@
     "location": "Exhibition Hall 1",
     "ticket_total": 300,
     "city_id" : 1102,
+    "price": 50000,
     "category_id": 4,
-    "organizer_id": 4,
+    "organizer_id": 1,
     "verified": false
   },
   {
@@ -59,9 +63,10 @@
     "end_date": "2023-08-30T18:30:00Z",
     "location": "Sports Stadium 1",
     "city_id" : 1102,
+    "price": 10000,
     "ticket_total": 1000,
     "category_id": 5,
-    "organizer_id": 5,
+    "organizer_id": 1,
     "verified": false
   }
 ]

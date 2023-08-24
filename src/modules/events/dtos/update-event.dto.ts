@@ -5,6 +5,8 @@ import {
   IsBoolean,
   IsInt,
   IsDateString,
+  IsNotEmpty,
+  IsNumber,
 } from 'class-validator';
 
 export class UpdateEventDto {
@@ -27,6 +29,10 @@ export class UpdateEventDto {
   @IsOptional()
   @IsString()
   location?: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  city_id?: number;
 
   @IsOptional()
   @IsInt()

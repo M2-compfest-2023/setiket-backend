@@ -5,6 +5,16 @@ const prisma = new PrismaClient();
 
 export default async function eventsSeeder() {
   try {
+    // for (const event of events) {
+    //   await prisma.event.upsert({
+    //     where: {
+    //       id: event.id,
+    //     },
+    //     update: event,
+    //     create: event,
+    //   });
+    // }
+
     const eo = await prisma.eventOrganizer.findFirst()
     for (const event of events) {
       event.organizer_id = eo.id
@@ -12,8 +22,8 @@ export default async function eventsSeeder() {
         where: {
           id: event.id,
         },
-        update: event,
-        create : event
+        create: event,
+        update: event
       });
     }
 

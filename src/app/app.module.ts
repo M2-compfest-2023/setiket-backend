@@ -10,9 +10,10 @@ import { AllExceptionsFilter } from '@/common/filters/exception.filter';
 import { CategoriesModule } from '@/modules/categories';
 import { LocationModule } from '@/modules/location/location.module';
 import { NotifyModule } from '@/modules/notify/notify.module';
+import { TicketsModule } from '@/modules/tickets/tickets.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, EventModule, LocationModule, CategoriesModule, NotifyModule],
+  imports: [UsersModule, AuthModule, EventModule, LocationModule, CategoriesModule, NotifyModule, TicketsModule],
   controllers: [AppController],
   providers: [
     AppService,
