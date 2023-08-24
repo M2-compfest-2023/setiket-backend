@@ -50,8 +50,6 @@ export class CreateEventDto {
   @IsNumber()
   city_id: number;
 
-  
-
   @ApiProperty({
     example: 100,
   })
@@ -65,11 +63,4 @@ export class CreateEventDto {
   @IsNotEmpty()
   @IsNumber()
   category_id: number;
-
-  @ApiProperty({
-    example: 1,
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  organizer_id: number;
 }
