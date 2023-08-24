@@ -5,7 +5,7 @@ import { UserLoginDto } from './dtos/login.dto';
 import { UserRegisterDto } from './dtos/register.dto';
 import { EoRegisterDto } from './dtos/register.dto';
 import { comparePassword, hashPassword } from '@/common/helpers/hash.helper';
-import { CustomException } from '@/response/CustomException';
+import { CustomException } from '@/common/response/CustomException';
 
 @Injectable()
 export class AuthService {
