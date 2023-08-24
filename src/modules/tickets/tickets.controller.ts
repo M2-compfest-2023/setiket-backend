@@ -26,9 +26,9 @@ export class TicketController {
   constructor(private readonly ticketService: TicketsService) {}
 
   @Get(':id')
-  //   @Roles(UserType.CUSTOMER)
-  //   @UseGuards(JwtAuthSGuard, RoleGuard)
-  //   @ApiBearerAuth()
+  @Roles(UserType.CUSTOMER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth()
   @HttpCode(200)
   @ResponseMessage('Success get all tickets')
   async getPurchaseTicketByUserId(@Param('id') id: number): Promise<any> {
@@ -42,9 +42,9 @@ export class TicketController {
   }
 
   @Post('purchase')
-  //   @Roles(UserType.CUSTOMER)
-  //   @UseGuards(JwtAuthSGuard, RoleGuard)
-  //   @ApiBearerAuth()
+  @Roles(UserType.CUSTOMER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth()
   @HttpCode(200)
   @ResponseMessage('Success create ticket purchase')
   async createTicketPurchase(
@@ -60,9 +60,9 @@ export class TicketController {
   }
 
   @Delete(':id')
-  //   @Roles(UserType.CUSTOMER)
-  //   @UseGuards(JwtAuthSGuard, RoleGuard)
-  //   @ApiBearerAuth()
+  @Roles(UserType.CUSTOMER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth()
   @HttpCode(200)
   @ResponseMessage('Success delete ticket purchase')
   async deleteTicketPurchase(@Param('id') id: number): Promise<any> {
