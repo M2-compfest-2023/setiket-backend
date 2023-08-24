@@ -40,8 +40,9 @@ export class UsersController {
     return users;
   }
 
-  @Get('/:user_id')
-  @UseGuards(JwtAuthGuard)
+  @Get('/activity/:user_id')
+  @Roles(UserType.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth()
   @HttpCode(201)
   @ApiParam({
@@ -52,7 +53,7 @@ export class UsersController {
   })
   @ResponseMessage('Success get user activity')
   async getUserActivity(@Param('user_id') user_id : string) {
-    const users = await this.usersService.getDetailUser(user_id);
+    const users = await this.usersService.getUserActivity(user_id);
     return users;
   }
 
