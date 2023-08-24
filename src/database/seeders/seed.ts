@@ -8,10 +8,11 @@ import { provinceSeeder } from "./province.seeder";
 const prisma = new PrismaClient();
 
 async function main() {
-  await usersSeeder();
-  await categorySeeder();
   await provinceSeeder();
   await citySeeder();
+  await categorySeeder();
+
+  await usersSeeder();
   await eventsSeeder();
 }
 

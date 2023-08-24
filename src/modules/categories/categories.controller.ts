@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Req, Res } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
-import { Request, Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
+import { ResponseMessage } from '@/common/decorators/responseMessage.decorator';
 
 @Controller('category')
 @ApiTags('Categories')
@@ -9,34 +9,16 @@ export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
   @Get()
-  async getAllCategories(
-    @Req() _: Request,
-    @Res() res: Response,
-  ): Promise<any> {
-    try {
-      const categories = await this.categoriesService.getAllCategories();
-      return res
-        .status(200)
-        .json({ message: 'Categories retrieved successfully', categories });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal server error', error });
-    }
+  @ResponseMessage('Categories retrieved successfully')
+  async getAllCategories() {
+    const categories = await this.categoriesService.getAllCategories();
+    return categories;
   }
 
   @Get(':id')
-  async getEventByCategory(
-    @Param('id') id: number,
-    @Req() _: Request,
-    @Res() res: Response,
-  ): Promise<any> {
-    try {
-      const events = await this.categoriesService.getEventByCategory(+id);
-
-      return res
-        .status(200)
-        .json({ message: 'Events retrieved successfully', events });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal server error', error });
-    }
+  @ResponseMessage('Events retrieved successfully')
+  async getEventByCategory(@Param('id') id: number) {
+    const events = await this.categoriesService.getEventByCategory(+id);
+    return events;
   }
 }
