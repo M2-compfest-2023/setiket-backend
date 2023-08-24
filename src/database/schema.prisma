@@ -17,6 +17,7 @@ model Users {
   email      String   @unique @db.VarChar(100)
   password   String   @db.VarChar(100)
   user_type  UserType
+  notify     Notify[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -109,6 +110,15 @@ model City {
   updated_at  DateTime @updatedAt
   Province    Province @relation(fields: [province_id], references: [id])
   event       Event[]
+}
+
+model Notify {
+  id         Int      @id @default(autoincrement())
+  message    String
+  user_id    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  users      Users   @relation(fields: [user_id], references: [id])
 }
 
 enum UserType {

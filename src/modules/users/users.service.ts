@@ -81,4 +81,14 @@ export class UsersService {
       verified: updatedUser.verified,
     };
   }
+
+  async isUserExist(user_id : string) {
+    const user = await this.prismaService.users.findFirst({
+      where : {
+        id : user_id
+      }
+    })
+
+    if (!user) throw new CustomException('User not found', 404);
+  }
 }
