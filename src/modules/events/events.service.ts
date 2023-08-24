@@ -50,6 +50,7 @@ export class EventService {
         category_id,
         organizer_id,
         verified: false,
+        city_id : eventData.city_id
       },
     });
 
