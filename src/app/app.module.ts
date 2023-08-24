@@ -9,9 +9,10 @@ import { ResponseInterceptor } from '@/common/interceptors/response.interceptor'
 import { AllExceptionsFilter } from '@/common/filters/exception.filter';
 import { CategoriesModule } from '@/modules/categories';
 import { LocationModule } from '@/modules/location/location.module';
+import { NotifyModule } from '@/modules/notify/notify.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, EventModule, LocationModule, CategoriesModule],
+  imports: [UsersModule, AuthModule, EventModule, LocationModule, CategoriesModule, NotifyModule],
   controllers: [AppController],
   providers: [
     AppService,
