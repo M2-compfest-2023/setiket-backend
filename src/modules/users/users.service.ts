@@ -35,30 +35,27 @@ export class UsersService {
     return user;
   }
 
-  // async getUserActivity(user_id: string) {
-  //   const userTickets = await this.prismaService.ticketPurchase.findMany({
-  //     where: {
-  //       customer: {
-  //         user_id : user_id
-  //       }
-  //     },
-  //     include : {
-  //       ticket : {
-  //         include : {
-  //           event : true
-  //         }
-  //       }
-  //     }
-  //   });
+  async getUserActivity(user_id: string) {
+    const userTickets = await this.prismaService.ticket.findMany({
+      where: {
+        customer: {
+          user_id: user_id,
+        },
+      },
+      include: {
+        event: true,
+        customer: true,
+      },
+    });
 
-  //   if (!userTickets) throw new CustomException('Customer user not found', 404);
+    if (!userTickets) throw new CustomException('Customer user not found', 404);
 
-  //   const result = userTickets.map(u => ({
-  //     eventName : u.ticket.event
-  //   }))
+    const result = userTickets.map((u) => ({
+      eventName: u.event.title,
+    }));
 
-  //   return result;
-  // }
+    return result;
+  }
 
   async approveEo(user_id: string, approve?: boolean) {
     const eoUser = await this.prismaService.eventOrganizer.findFirst({

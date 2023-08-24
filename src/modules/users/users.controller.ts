@@ -40,21 +40,21 @@ export class UsersController {
     return users;
   }
 
-  // @Get('/:user_id')
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
-  // @HttpCode(201)
-  // @ApiParam({
-  //   name : 'user_id',
-  //   type : String,
-  //   required : true,
-  //   example : 'adaiorewoirqowerqwffjwojqfoieqjq'
-  // })
-  // @ResponseMessage('Success get user activity')
-  // async getUserActivity(@Param('user_id') user_id : string) {
-  //   const users = await this.usersService.getDetailUser(user_id);
-  //   return users;
-  // }
+  @Get('/:user_id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(201)
+  @ApiParam({
+    name : 'user_id',
+    type : String,
+    required : true,
+    example : 'adaiorewoirqowerqwffjwojqfoieqjq'
+  })
+  @ResponseMessage('Success get user activity')
+  async getUserActivity(@Param('user_id') user_id : string) {
+    const users = await this.usersService.getDetailUser(user_id);
+    return users;
+  }
 
   @Put('/eo/:user_id')
   @Roles(UserType.ADMIN)
