@@ -44,6 +44,14 @@ export class CreateEventDto {
   location: string;
 
   @ApiProperty({
+    example: 1101,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  city_id: number;
+
+
+  @ApiProperty({
     example: 100,
   })
   @IsNotEmpty()
