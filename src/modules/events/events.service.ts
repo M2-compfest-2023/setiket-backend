@@ -43,7 +43,37 @@ export class EventService {
     return sales;
   }
 
-  async createEvent(eventData: CreateEventDto): Promise<any> {
+  async getEventByUser(id: string): Promise<Event[]> {
+    const customer = await this.prisma.customer.findUnique({
+      where: { user_id: id },
+    });
+  
+    const tickets = await this.prisma.ticket.findMany({
+      where: { customer_id: customer.id },
+    });
+  
+    if (!tickets || tickets.length === 0) {
+      throw new NotFoundException(`No events found for user with ID ${id}`);
+    }
+  
+    const uniqueEventIds = Array.from(new Set(tickets.map((ticket) => ticket.event_id)));
+
+    const uniqueEventIdsAsInt = uniqueEventIds.map((eventId) => eventId as number);
+
+    const events = await this.prisma.event.findMany({
+      where: { id: { in: uniqueEventIdsAsInt } },
+    });
+  
+    return events;
+  }
+
+  async createEvent(eventData: CreateEventDto, id: string): Promise<any> {
+    const organizer = await this.prisma.eventOrganizer.findUnique({
+      where: { user_id: id },
+    });
+
+    console.log(organizer);
+
     const {
       title,
       description,
@@ -53,7 +83,6 @@ export class EventService {
       city_id,
       ticket_total,
       category_id,
-      organizer_id,
     } = eventData;
 
     const event = await this.prisma.event.create({
@@ -66,7 +95,7 @@ export class EventService {
         city_id,
         ticket_total,
         category_id,
-        organizer_id,
+        organizer_id: organizer.id,
         verified: false,
       },
     });

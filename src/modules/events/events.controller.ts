@@ -19,6 +19,8 @@ import { ApproveEventDto } from './dtos/approve-event.dto';
 import { ResponseMessage } from '@/common/decorators/responseMessage.decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt';
 import { RoleGuard } from '@/common/guards/roles/role.guard';
+import { HttpCode } from '@nestjs/common';
+import { Token } from '@/common/decorators/token.decorator';
 
 @Controller('events')
 @ApiTags('Events')
@@ -43,13 +45,22 @@ export class EventController {
     return await this.eventsService.getEventSales(id);
   }
 
+  @Get('user/me')
+  @Roles(UserType.CUSTOMER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth()
+  @ResponseMessage('Events retrieved successfully')
+  async getEventByUser(@Token('id') id: string) {
+    return await this.eventsService.getEventByUser(id);
+  }
+
   @Post()
   @Roles(UserType.ADMIN, UserType.EVENTORGANIZER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth()
   @ResponseMessage('Event created successfully')
-  async createEvent(@Body() eventData: CreateEventDto) {
-    return await this.eventsService.createEvent(eventData);
+  async createEvent(@Body() eventData: CreateEventDto, @Token('id') id: string) {
+    return await this.eventsService.createEvent(eventData, id);
   }
 
   @Put(':id')
@@ -57,7 +68,10 @@ export class EventController {
   @Roles(UserType.ADMIN, UserType.EVENTORGANIZER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ResponseMessage('Event updated successfully')
-  async updateEvent(@Param('id') id: number, @Body() eventData: UpdateEventDto) {
+  async updateEvent(
+    @Param('id') id: number,
+    @Body() eventData: UpdateEventDto,
+  ) {
     return await this.eventsService.updateEvent(id, eventData);
   }
 
@@ -72,9 +86,7 @@ export class EventController {
 
   @Get('eo/:id')
   @ResponseMessage('Events retrieved successfully')
-  async getEventsByOrganizer(
-    @Param('id') id: number,
-  ) {
+  async getEventsByOrganizer(@Param('id') id: number) {
     return await this.eventsService.getEventsByOrganizer(id);
   }
 
@@ -87,7 +99,13 @@ export class EventController {
     @Query('start_date') start_date?: string,
     @Query('end_date') end_date?: string,
   ) {
-    return await this.eventsService.filterEvents(province, city, category, start_date, end_date);
+    return await this.eventsService.filterEvents(
+      province,
+      city,
+      category,
+      start_date,
+      end_date,
+    );
   }
 
   @Put('approval/:id')
