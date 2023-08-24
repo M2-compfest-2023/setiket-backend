@@ -52,6 +52,7 @@ export class UsersService {
 
     const result = userTickets.map((u) => ({
       eventName: u.event.title,
+      timeStamp : u.created_at.toLocaleString()
     }));
 
     return result;
