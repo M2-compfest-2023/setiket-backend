@@ -37,6 +37,12 @@ export class EventController {
     return await this.eventsService.getEventById(id);
   }
 
+  @Get(':id/sales')
+  @ResponseMessage('Event sales retrieved successfully')
+  async getEventSales(@Param('id') id: number) {
+    return await this.eventsService.getEventSales(id);
+  }
+
   @Post()
   @Roles(UserType.ADMIN, UserType.EVENTORGANIZER)
   @UseGuards(JwtAuthGuard, RoleGuard)
@@ -78,9 +84,10 @@ export class EventController {
     @Query('province') province?: string,
     @Query('city') city?: string,
     @Query('category') category?: string,
-    @Query('date') date?: string,
+    @Query('start_date') start_date?: string,
+    @Query('end_date') end_date?: string,
   ) {
-    return await this.eventsService.filterEvents(province, city, category, date);
+    return await this.eventsService.filterEvents(province, city, category, start_date, end_date);
   }
 
   @Put('approval/:id')

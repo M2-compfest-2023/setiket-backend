@@ -85,8 +85,8 @@ model Event {
 model Ticket {
   id          Int      @id @default(autoincrement())
   quantity    Int
-  event_id    Int
   customer_id Int
+  event_id    Int
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   event       Event    @relation(fields: [event_id], references: [id])

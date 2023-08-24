@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsNotEmpty,
@@ -50,6 +50,7 @@ export class CreateEventDto {
   @IsNumber()
   city_id: number;
 
+  
 
   @ApiProperty({
     example: 100,

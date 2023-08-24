@@ -27,6 +27,22 @@ export class EventService {
     return event;
   }
 
+  async getEventSales(eventId: number): Promise<any> {
+    const event = await this.prisma.event.findUnique({
+      where: { id: +eventId },
+    });
+
+    if (!event) {
+      throw new NotFoundException(`Event with ID ${eventId} not found`);
+    }
+
+    const sales = await this.prisma.ticket.findMany({
+      where: { event_id: +event.id },
+    });    
+
+    return sales;
+  }
+
   async createEvent(eventData: CreateEventDto): Promise<any> {
     const {
       title,
@@ -34,6 +50,7 @@ export class EventService {
       start_date,
       end_date,
       location,
+      city_id,
       ticket_total,
       category_id,
       organizer_id,
@@ -46,11 +63,11 @@ export class EventService {
         start_date: new Date(start_date),
         end_date: new Date(end_date),
         location,
+        city_id,
         ticket_total,
         category_id,
         organizer_id,
         verified: false,
-        city_id : eventData.city_id
       },
     });
 
@@ -100,21 +117,53 @@ export class EventService {
   }
 
   async filterEvents(
-    province: string,
-    city: string,
-    category: string,
-    date: string,
+    province: string | null,
+    city: string | null,
+    category: string | null,
+    start_date: string | null,
+    end_date: string | null,
   ): Promise<Event[]> {
+    const where: {
+      [key: string]: any;
+    }[] = [];
+
+    if (province) {
+      where.push({ location: { contains: province } });
+    }
+
+    if (city) {
+      where.push({ location: { contains: city } });
+    }
+
+    if (category) {
+      where.push({ category: { category_name: { contains: category } } });
+    }
+
+    if (start_date) {
+      where.push({ start_date: new Date(start_date) });
+    }
+
+    if (end_date) {
+      where.push({ end_date: new Date(end_date) });
+    }
+
     const events = await this.prisma.event.findMany({
       where: {
-        AND: [
-          { location: { contains: province } },
-          { location: { contains: city } },
-          { category: { category_name: { contains: category } } },
-          { start_date: new Date(date) },
-        ],
+        AND: where,
       },
     });
+
+    // const events = await this.prisma.event.findMany({
+    //   where: {
+    //     AND: [
+    //       { location: { contains: province } },
+    //       { location: { contains: city } },
+    //       { category: { category_name: { contains: category } } },
+    //       { start_date: new Date(start_date) },
+    //       { end_date: new Date(end_date) },
+    //     ],
+    //   },
+    // });
 
     return events;
   }
