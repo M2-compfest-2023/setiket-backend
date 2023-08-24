@@ -1,5 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { ValidationError } from 'class-validator';
 
 interface ErrorResponse {
@@ -20,6 +21,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal server error';
     let validationError: ValidationError[] = [];
+
+    if(exception instanceof PrismaClientValidationError) console.log(exception)
 
     if (exception instanceof HttpException) {
       console.log(exception.getResponse());
