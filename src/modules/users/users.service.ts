@@ -67,18 +67,18 @@ export class UsersService {
     return [...createEventActivity, ...buyTicketActivity];
   }
 
-  async getUserActivity(user_id: string) {
-    const userTickets = await this.prismaService.ticket.findMany({
-      where: {
-        customer: {
-          user_id: user_id,
-        },
-      },
-      include: {
-        event: true,
-        customer: true,
-      },
-    });
+    async getUserActivity(user_id: string) {
+        const userTickets = await this.prismaService.ticket.findMany({
+            where: {
+                customer: {
+                    user_id: user_id,
+                },
+            },
+            include: {
+                event: true,
+                customer: true,
+            },
+        });
 
         if (!userTickets)
             throw new CustomException('Customer user not found', 404);
@@ -91,14 +91,15 @@ export class UsersService {
         return result;
     }
 
-  async approveEo(user_id: string, approve?: boolean) {
-    const eoUser = await this.prismaService.eventOrganizer.findFirst({
-      where: {
-        user_id: user_id,
-      },
-    });
-    if (!eoUser) throw new CustomException('Event organizer user not found', 404);
-
+    async approveEo(user_id: string, approve?: boolean) {
+        const eoUser = await this.prismaService.eventOrganizer.findFirst({
+            where: {
+                user_id: user_id,
+            },
+        });
+        if (!eoUser)
+            throw new CustomException('Event organizer user not found', 404);
+        // if(eoUser.verified) throw new CustomException('Event organizer user already verified', 400)
         const updatedUser = await this.prismaService.eventOrganizer.update({
             where: {
                 id: eoUser.id,

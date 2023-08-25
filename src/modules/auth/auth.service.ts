@@ -115,10 +115,17 @@ export class AuthService {
             },
         });
 
-        if (admin) await this.mailService.newEventOrganizer(newUser.name, admin.user.email);
+        if (admin)
+            await this.mailService.newEventOrganizer(
+                newUser.name,
+                admin.user.email,
+            );
 
         return {
-            access_token: this.jwtService.sign({ username: newUser.username, id: newUser.id }),
+            access_token: this.jwtService.sign({
+                username: newUser.username,
+                id: newUser.id,
+            }),
         };
     }
 }
