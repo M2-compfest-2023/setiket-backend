@@ -7,6 +7,7 @@ import { EoRegisterDto } from './dtos/register.dto';
 import { comparePassword, hashPassword } from '@/common/helpers/hash.helper';
 import { CustomException } from '@/common/response/CustomException';
 import { MailingService } from '@/providers/mail/mail.service';
+import { UserType } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -61,7 +62,7 @@ export class AuthService {
         name,
         email,
         password: hashedPassword,
-        user_type: 'CUSTOMER',
+        user_type: UserType.CUSTOMER,
       },
     });
 
@@ -92,7 +93,7 @@ export class AuthService {
         name,
         email,
         password: hashedPassword,
-        user_type: 'CUSTOMER',
+        user_type: UserType.EVENTORGANIZER,
         eventOrganizers: {
           create: {
             organization_name: organizationName,
