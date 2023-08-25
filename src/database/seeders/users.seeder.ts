@@ -9,7 +9,6 @@ export default async function usersSeeder() {
     for (const idx in userData) {
         const user = userData[idx];
         const userUpsert: Prisma.UsersCreateInput = {
-            id: user.id,
             name: user.name,
             username: user.username,
             email: user.email,
@@ -46,12 +45,8 @@ export default async function usersSeeder() {
                 },
             };
 
-        await prisma.users.upsert({
-            where: {
-                id: userUpsert.id,
-            },
-            update: userUpsert,
-            create: userUpsert,
+        await prisma.users.create({
+            data: userUpsert,
         });
     }
     console.log('Users seeded successfully');

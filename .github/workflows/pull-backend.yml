@@ -17,12 +17,12 @@ jobs:
                   password: ${{ secrets.SSH_PASSWORD }}
                   port: 22
                   script: |
-                      cd /var/www/etiket-backend
+                      cd /var/www/setiket-backend
                       git stash
-                      git pull --rebase origin main
-                      git stash pop
-                      npm install --ignore-engines
-                      yarn migrate:dev
-                      pm2 delete eticket-backend
-                      npm run build
-                      npm run deploy:dev
+                      git pull --rebase
+                      nest build
+                      pm2 delete seticket-backend
+                      pm2 start dist/main.js --name seticket-backend
+                      pm2 save
+                      pm2 restart seticket-backend
+                      systemctl restart nginx

@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import * as csv from 'csvtojson';
+import csv from 'csvtojson';
 
 const prisma = new PrismaClient();
 
