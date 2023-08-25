@@ -5,6 +5,7 @@ import { UpdateEventDto } from './dtos/update-event.dto';
 import { Event } from '@prisma/client';
 import { NotFoundException } from '@nestjs/common';
 import { ApproveEventDto } from './dtos/approve-event.dto';
+import { FilterEventDto } from './dtos/filter-event.dto';
 
 @Injectable()
 export class EventService {
@@ -44,6 +45,27 @@ export class EventService {
   }
 
   async getEventByUser(id: string): Promise<Event[]> {
+
+    const user = await this.prisma.users.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    if (user.user_type === 'EVENTORGANIZER') {
+      const organizer = await this.prisma.eventOrganizer.findUnique({
+        where: { user_id: id },
+      });
+    
+      const events = await this.prisma.event.findMany({
+        where: { organizer_id: organizer.id },
+      });
+    
+      return events;
+    }
+
     const customer = await this.prisma.customer.findUnique({
       where: { user_id: id },
     });
@@ -71,8 +93,6 @@ export class EventService {
     const organizer = await this.prisma.eventOrganizer.findUnique({
       where: { user_id: id },
     });
-
-    console.log(organizer);
 
     const {
       title,
@@ -146,55 +166,10 @@ export class EventService {
   }
 
   async filterEvents(
-    province: string | null,
-    city: string | null,
-    category: string | null,
-    start_date: string | null,
-    end_date: string | null,
-  ): Promise<Event[]> {
-    const where: {
-      [key: string]: any;
-    }[] = [];
+    filterEvent: FilterEventDto
+  ): Promise<any> {
 
-    if (province) {
-      where.push({ location: { contains: province } });
-    }
-
-    if (city) {
-      where.push({ location: { contains: city } });
-    }
-
-    if (category) {
-      where.push({ category: { category_name: { contains: category } } });
-    }
-
-    if (start_date) {
-      where.push({ start_date: new Date(start_date) });
-    }
-
-    if (end_date) {
-      where.push({ end_date: new Date(end_date) });
-    }
-
-    const events = await this.prisma.event.findMany({
-      where: {
-        AND: where,
-      },
-    });
-
-    // const events = await this.prisma.event.findMany({
-    //   where: {
-    //     AND: [
-    //       { location: { contains: province } },
-    //       { location: { contains: city } },
-    //       { category: { category_name: { contains: category } } },
-    //       { start_date: new Date(start_date) },
-    //       { end_date: new Date(end_date) },
-    //     ],
-    //   },
-    // });
-
-    return events;
+    return "";
   }
 
   async approveEvent(eventId: number, approve: ApproveEventDto): Promise<any> {
