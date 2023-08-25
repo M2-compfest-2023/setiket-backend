@@ -3,13 +3,13 @@ import { IsNumber } from 'class-validator';
 
 export class CreateTicketDto {
     @ApiProperty({
-        'example': 10
+        example: 10,
     })
     @IsNumber()
     quantity: number;
 
     @ApiProperty({
-        'example': 1
+        example: 1,
     })
     @IsNumber()
     event_id: number;
