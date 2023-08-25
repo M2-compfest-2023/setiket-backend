@@ -1,52 +1,50 @@
-// src/events/dto/update-event.dto.ts
 import {
-  IsOptional,
-  IsString,
-  IsBoolean,
-  IsInt,
-  IsDateString,
-  IsNotEmpty,
-  IsNumber,
+    IsDateString,
+    IsInt,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsString,
 } from 'class-validator';
 
 export class UpdateEventDto {
-  @IsOptional()
-  @IsString()
-  title?: string;
+    @IsOptional()
+    @IsString()
+    title?: string;
 
-  @IsOptional()
-  @IsString()
-  description?: string;
+    @IsOptional()
+    @IsString()
+    description?: string;
 
-  @IsOptional()
-  @IsDateString()
-  start_date?: Date;
+    @IsOptional()
+    @IsDateString()
+    start_date?: Date;
 
-  @IsOptional()
-  @IsDateString()
-  end_date?: Date;
+    @IsOptional()
+    @IsDateString()
+    end_date?: Date;
 
-  @IsOptional()
-  @IsString()
-  location?: string;
+    @IsOptional()
+    @IsString()
+    location?: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  city_id?: number;
+    @IsNotEmpty()
+    @IsNumber()
+    city_id?: number;
 
-  @IsOptional()
-  @IsInt()
-  ticket_total?: number;
+    @IsOptional()
+    @IsInt()
+    ticket_total?: number;
 
-  @IsOptional()
-  @IsInt()
-  category_id?: number;
+    @IsOptional()
+    @IsInt()
+    category_id?: number;
 
-  @IsOptional()
-  @IsNumber()
-  price?: number;
+    @IsOptional()
+    @IsNumber()
+    price?: number;
 
-  // @IsOptional()
-  // @IsBoolean()
-  // verified?: boolean;
+    // @IsOptional()
+    // @IsBoolean()
+    // verified?: boolean;
 }
