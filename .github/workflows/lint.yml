@@ -11,6 +11,7 @@ jobs:
   lint:
     name: ⬣ ESLint
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: 🛑 Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
@@ -32,6 +33,7 @@ jobs:
   prettier:
     name: 💅 Prettier
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: 🛑 Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
@@ -53,6 +55,7 @@ jobs:
   test:
     name: 🤡 Jest Test
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: 🛑 Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
