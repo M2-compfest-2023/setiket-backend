@@ -63,4 +63,11 @@ export class CreateEventDto {
   @IsNotEmpty()
   @IsNumber()
   category_id: number;
+
+  @ApiProperty({
+    example: 100000,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  price:number;
 }
