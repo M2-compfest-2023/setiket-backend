@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { UserType } from '@prisma/client';
 
 import { comparePassword, hashPassword } from '@/common/helpers/hash.helper';
 import { CustomException } from '@/common/response/CustomException';
 import { MailingService } from '@/providers/mail/mail.service';
-import { UserType } from '@prisma/client';
 import { PrismaService } from '@/providers/prisma';
 
 import { UserLoginDto } from './dtos/login.dto';
@@ -80,7 +80,8 @@ export class AuthService {
     }
 
     async registerEo(registerDto: EoRegisterDto) {
-        const { username, name, email, password, organizationName } = registerDto;
+        const { username, name, email, password, organizationName } =
+            registerDto;
 
         const user = await this.prismaService.users.findUnique({
             where: {

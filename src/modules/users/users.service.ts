@@ -36,36 +36,36 @@ export class UsersService {
         return user;
     }
 
-  async getActivities() {
-    const tickets = await this.prismaService.ticket.findMany({
-      include: {
-        event: true,
-        customer: {
-          include : {
-            user : true
-          }
-        },
-      },
-    });
+    async getActivities() {
+        const tickets = await this.prismaService.ticket.findMany({
+            include: {
+                event: true,
+                customer: {
+                    include: {
+                        user: true,
+                    },
+                },
+            },
+        });
 
-    const buyTicketActivity = tickets.map((u) => ({
-      meesage: `${u.customer.user.name} bought ${u.quantity} tickets of ${u.event.title}`,
-      timestamp : u.created_at.toLocaleString()
-    }));
+        const buyTicketActivity = tickets.map((u) => ({
+            meesage: `${u.customer.user.name} bought ${u.quantity} tickets of ${u.event.title}`,
+            timestamp: u.created_at.toLocaleString(),
+        }));
 
-    const events = await this.prismaService.event.findMany({
-      include : {
-        organizer : true
-      }
-    })
+        const events = await this.prismaService.event.findMany({
+            include: {
+                organizer: true,
+            },
+        });
 
-    const createEventActivity = events.map(u => ({
-      message : `${u.organizer.organization_name} created event ${u.title}`,
-      timestamp : u.created_at.toLocaleString()
-    }))
+        const createEventActivity = events.map((u) => ({
+            message: `${u.organizer.organization_name} created event ${u.title}`,
+            timestamp: u.created_at.toLocaleString(),
+        }));
 
-    return [...createEventActivity, ...buyTicketActivity];
-  }
+        return [...createEventActivity, ...buyTicketActivity];
+    }
 
     async getUserActivity(user_id: string) {
         const userTickets = await this.prismaService.ticket.findMany({

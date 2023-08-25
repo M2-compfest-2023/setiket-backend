@@ -50,16 +50,16 @@ export class UsersController {
         return users;
     }
 
-  @Get('/activity')
-  @Roles(UserType.ADMIN)
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @ApiBearerAuth()
-  @HttpCode(201)
-  @ResponseMessage('Success get all activity')
-  async getAllActivity() {
-    const users = await this.usersService.getActivities();
-    return users;
-  }
+    @Get('/activity')
+    @Roles(UserType.ADMIN)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @ApiBearerAuth()
+    @HttpCode(201)
+    @ResponseMessage('Success get all activity')
+    async getAllActivity() {
+        const users = await this.usersService.getActivities();
+        return users;
+    }
 
     @Get('/activity/:user_id')
     @Roles(UserType.ADMIN)
