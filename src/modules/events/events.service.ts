@@ -25,7 +25,21 @@ export class EventService {
       throw new NotFoundException(`Event with ID ${eventId} not found`);
     }
 
-    return event;
+    const city = await this.prisma.city.findUnique({
+      where: { id: +event.city_id },
+    });
+
+    const province = await this.prisma.province.findUnique({
+      where: { id: +city.province_id },
+    });
+
+    const eventWithCity = {
+      ...event,
+      province: province.name,
+      city: city.name,
+    };
+
+    return eventWithCity;
   }
 
   async getEventSales(eventId: number): Promise<any> {
@@ -103,6 +117,7 @@ export class EventService {
       city_id,
       ticket_total,
       category_id,
+      price,
     } = eventData;
 
     const event = await this.prisma.event.create({
@@ -115,6 +130,7 @@ export class EventService {
         city_id,
         ticket_total,
         category_id,
+        price,
         organizer_id: organizer.id,
         verified: false,
       },
@@ -165,12 +181,37 @@ export class EventService {
     return events;
   }
 
-  async filterEvents(
-    filterEvent: FilterEventDto
-  ): Promise<any> {
+    async filterEvents(
+      filterEvent: FilterEventDto
+    ): Promise<Event[]> {
+      const query = {}
 
-    return "";
-  }
+      if (filterEvent.province) {
+        query['province'] = filterEvent.province
+      }
+
+      if (filterEvent.city) {
+        query['city'] = filterEvent.city
+      }
+
+      if (filterEvent.category) {
+        query['category'] = filterEvent.category
+      }
+
+      if (filterEvent.start_date) {
+        query['start_date'] = filterEvent.start_date
+      }
+
+      if (filterEvent.end_date) {
+        query['end_date'] = filterEvent.end_date
+      }
+
+      const events = await this.prisma.event.findMany({
+        where: query,
+      });
+
+      return events;
+    }
 
   async approveEvent(eventId: number, approve: ApproveEventDto): Promise<any> {
     const existingEvent = await this.prisma.event.findUnique({

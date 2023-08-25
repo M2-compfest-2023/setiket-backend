@@ -42,6 +42,10 @@ export class UpdateEventDto {
   @IsInt()
   category_id?: number;
 
+  @IsOptional()
+  @IsNumber()
+  price?: number;
+
   // @IsOptional()
   // @IsBoolean()
   // verified?: boolean;
