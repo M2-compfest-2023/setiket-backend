@@ -33,10 +33,20 @@ export class EventService {
       where: { id: +city.province_id },
     });
 
+    const soldTickets = await this.prisma.ticket.findMany({
+      where: { event_id: +event.id },
+    });
+
+    let totalSoldTickets = 0;
+    for (let i = 0; i < soldTickets.length; i++) {
+      totalSoldTickets += soldTickets[i].quantity;
+    }
+
     const eventWithCity = {
       ...event,
       province: province.name,
       city: city.name,
+      sold_tickets: totalSoldTickets,
     };
 
     return eventWithCity;

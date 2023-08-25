@@ -20,8 +20,15 @@ export class TicketsService {
 
   async createTicketPurchase(
     ticketData: CreateTicketDto,
+    id: string,
   ): Promise<Ticket> {
     return this.prismaService.$transaction(async (prisma) => {
+      const user = await prisma.customer.findUnique({
+        where: {
+          user_id: id,
+        },
+      });
+
       const event = await prisma.event.findUnique({
         where: {
           id: +ticketData.event_id,
@@ -47,12 +54,12 @@ export class TicketsService {
         throw new NotFoundException(`Event with ID ${ticketData.event_id} is out of stock`);
       }
 
-      const { quantity, customer_id, event_id } = ticketData;
+      const { quantity, event_id } = ticketData;
 
       const ticket = await prisma.ticket.create({
         data: {
           quantity,
-          customer_id,
+          customer_id: user.id,
           event_id,
         },
       });
