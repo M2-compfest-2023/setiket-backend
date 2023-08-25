@@ -19,6 +19,7 @@ import { JwtAuthGuard } from '@/common/guards/jwt';
 import { Roles } from '@/common/decorators/roles.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateTicketDto } from './dtos/create-ticket.dto';
+import { Token } from '@/common/decorators/token.decorator';
 
 @Controller('ticket')
 @ApiTags('Tickets')
@@ -49,9 +50,10 @@ export class TicketController {
   @ResponseMessage('Success create ticket purchase')
   async createTicketPurchase(
     @Body() ticketData: CreateTicketDto,
+    @Token('id') id: string,
   ): Promise<any> {
     try {
-      const ticket = await this.ticketService.createTicketPurchase(ticketData);
+      const ticket = await this.ticketService.createTicketPurchase(ticketData, id);
       return ticket;
     } catch (error) {
       if (error.status) throw new CustomException(error.message, error.status);

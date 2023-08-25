@@ -26,9 +26,7 @@ import { FilterEventDto } from './dtos/filter-event.dto';
 @Controller('events')
 @ApiTags('Events')
 export class EventController {
-  constructor(
-    private readonly eventsService: EventService
-  ) {}
+  constructor(private readonly eventsService: EventService) {}
 
   @Get()
   @HttpCode(200)
@@ -107,12 +105,8 @@ export class EventController {
   @Get('filter')
   @HttpCode(200)
   @ResponseMessage('Events retrieved successfully')
-  async filterEvents(
-    @Query() filterEvent: FilterEventDto
-  ) {
-    return await this.eventsService.filterEvents(
-      filterEvent
-    );
+  async filterEvents(@Query() filterEvent: FilterEventDto) {
+    return await this.eventsService.filterEvents(filterEvent);
   }
 
   @Put('approval/:id')

@@ -13,10 +13,4 @@ export class CreateTicketDto {
     })
     @IsNumber()
     event_id: number;
-
-    @ApiProperty({
-        'example': 1
-    })
-    @IsNumber()
-    customer_id: number;
 }
