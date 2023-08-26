@@ -202,12 +202,8 @@ export class EventService {
         const query = {};
 
         if (filterEvent.province) {
-            const province = await this.prisma.province.findFirst({
-                where: { name: filterEvent.province },
-            });
-
             const cities = await this.prisma.city.findMany({
-                where: { province_id: province.id },
+                where: { province_id: +filterEvent.province },
             });
 
             const cityIds = cities.map((city) => city.id);
@@ -217,7 +213,7 @@ export class EventService {
 
         if (filterEvent.city) {
             const city = await this.prisma.city.findFirst({
-                where: { name: filterEvent.city },
+                where: { id: +filterEvent.city },
             });
 
             query['city_id'] = city.id;
@@ -225,7 +221,7 @@ export class EventService {
 
         if (filterEvent.category) {
             const category = await this.prisma.category.findFirst({
-                where: { category_name: filterEvent.category },
+                where: { id: +filterEvent.category },
             });
 
             query['category_id'] = category.id;
@@ -273,8 +269,6 @@ export class EventService {
         if (!existingEvent) {
             throw new NotFoundException(`Event with ID ${eventId} not found`);
         }
-
-        // console.log(approve);
 
         if (approve.verified === true) {
             const approvedEvent = await this.prisma.event.update({
