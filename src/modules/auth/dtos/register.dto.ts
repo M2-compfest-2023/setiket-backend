@@ -1,26 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, Length } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class UserRegisterDto {
     @ApiProperty({
         example: 'new user',
     })
     @IsString()
-    @Length(5, 10)
+    // @Length(5, 10)
     username: string;
 
     @ApiProperty({
         example: 'password',
     })
     @IsString()
-    @Length(6, 12)
+    // @Length(6, 12)
     password: string;
 
     @ApiProperty({
         example: 'Use new',
     })
     @IsString()
-    @Length(5, 10)
+    // @Length(5, 10)
     name: string;
 
     @ApiProperty({
@@ -35,6 +35,6 @@ export class EoRegisterDto extends UserRegisterDto {
         example: 'Compfest 15',
     })
     @IsString()
-    @Length(5, 10)
+    // @Length(5, 64)
     organizationName: string;
 }

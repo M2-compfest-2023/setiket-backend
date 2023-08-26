@@ -8,7 +8,7 @@ export class UsersService {
     constructor(private prismaService: PrismaService) {}
 
     async getAllUsers() {
-        return await this.prismaService.users.findMany({
+        const users = await this.prismaService.users.findMany({
             select: {
                 username: true,
                 id: true,
@@ -17,6 +17,35 @@ export class UsersService {
                 user_type: true,
             },
         });
+
+        const res = users.map((u) => ({
+            username: u.username,
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            user_type: u.user_type,
+            verified: true,
+        }));
+
+        res.map((u) => {
+            if (u.user_type === 'CUSTOMER') {
+                u.verified = true;
+            } else if (u.user_type === 'EVENTORGANIZER') {
+                this.prismaService.eventOrganizer
+                    .findFirst({
+                        where: {
+                            user_id: u.id,
+                        },
+                    })
+                    .then((res) => {
+                        u.verified = res.verified;
+                    });
+            } else if (u.user_type === 'ADMIN') {
+                u.verified = true;
+            }
+        });
+
+        return res;
     }
 
     async getDetailUser(user_id: string) {
@@ -35,7 +64,31 @@ export class UsersService {
 
         if (!user) throw new CustomException('User not found', 404);
 
-        return user;
+        const resUser = {
+            username: user.username,
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            user_type: user.user_type,
+            verified: true,
+        };
+        if (user.user_type === 'CUSTOMER') {
+            resUser.verified = true;
+        } else if (user.user_type === 'EVENTORGANIZER') {
+            this.prismaService.eventOrganizer
+                .findFirst({
+                    where: {
+                        user_id: user.id,
+                    },
+                })
+                .then((res) => {
+                    resUser.verified = res.verified;
+                });
+        } else if (user.user_type === 'ADMIN') {
+            resUser.verified = true;
+        }
+
+        return resUser;
     }
 
     async getActivities() {

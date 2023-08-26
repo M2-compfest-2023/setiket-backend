@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    Post,
+    UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { ResponseMessage } from '@/common/decorators/responseMessage.decorator';
@@ -42,7 +49,7 @@ export class AuthController {
         return register;
     }
 
-    @Post('me')
+    @Get('me')
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth()
     @HttpCode(200)
