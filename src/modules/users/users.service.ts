@@ -8,15 +8,39 @@ export class UsersService {
     constructor(private prismaService: PrismaService) {}
 
     async getAllUsers() {
-        return await this.prismaService.users.findMany({
+        const users = await this.prismaService.users.findMany({
             select: {
                 username: true,
                 id: true,
                 name: true,
                 email: true,
                 user_type: true,
+                eventOrganizers: {
+                    select: {
+                        verified: true,
+                    },
+                },
             },
         });
+
+        const res = users.map((u) => ({
+            username: u.username,
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            user_type: u.user_type,
+            verified: u.eventOrganizers[0],
+        }));
+
+        res.map((u) => {
+            if (u.user_type != 'EVENTORGANIZER') {
+                u.verified = {
+                    verified: true,
+                };
+            }
+        });
+
+        return res;
     }
 
     async getDetailUser(user_id: string) {
@@ -30,12 +54,26 @@ export class UsersService {
                 name: true,
                 email: true,
                 user_type: true,
+                eventOrganizers: {
+                    select: {
+                        verified: true,
+                    },
+                },
             },
         });
 
         if (!user) throw new CustomException('User not found', 404);
 
-        return user;
+        const resUser = {
+            username: user.username,
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            user_type: user.user_type,
+            verified: user.eventOrganizers[0].verified,
+        };
+
+        return resUser;
     }
 
     async getActivities() {
@@ -51,7 +89,7 @@ export class UsersService {
         });
 
         const buyTicketActivity = tickets.map((u) => ({
-            meesage: `${u.customer.user.name} bought ${u.quantity} tickets of ${u.event.title}`,
+            message: `${u.customer.user.name} bought ${u.quantity} tickets of ${u.event.title}`,
             timestamp: u.created_at.toLocaleString(),
         }));
 

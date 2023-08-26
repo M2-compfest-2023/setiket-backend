@@ -100,7 +100,7 @@ export class EventController {
     @Get('eo/:id')
     @HttpCode(200)
     @ResponseMessage('Events retrieved successfully')
-    async getEventsByOrganizer(@Param('id') id: number) {
+    async getEventsByOrganizer(@Param('id') id: string) {
         return await this.eventsService.getEventsByOrganizer(id);
     }
 
@@ -123,5 +123,15 @@ export class EventController {
         // @Param('approve') approve: boolean,
     ) {
         return await this.eventsService.approveEvent(id, approve);
+    }
+
+    @Get('/ticket_left/:id')
+    @Roles(UserType.ADMIN, UserType.EVENTORGANIZER)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @ApiBearerAuth()
+    @HttpCode(200)
+    @ResponseMessage('Events retrieved successfully')
+    async getTicketLeft(@Param('id') id: number) {
+        return await this.eventsService.getTicketLeft(id);
     }
 }

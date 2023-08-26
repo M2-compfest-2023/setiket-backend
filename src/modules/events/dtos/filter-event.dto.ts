@@ -5,17 +5,17 @@ export class FilterEventDto {
     @ApiPropertyOptional({
         required: false,
     })
-    province: string;
+    province: number;
 
     @ApiPropertyOptional({
         required: false,
     })
-    city: string;
+    city: number;
 
     @ApiPropertyOptional({
         required: false,
     })
-    category: string;
+    category: number;
 
     @ApiPropertyOptional({
         required: false,

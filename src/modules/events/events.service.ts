@@ -65,12 +65,26 @@ export class EventService {
 
         const sales = await this.prisma.ticket.findMany({
             where: { event_id: +event.id },
+            include: {
+                customer: {
+                    include: { user: true },
+                },
+            },
         });
 
-        return sales;
+        const res = sales.map((sale) => {
+            return {
+                id: sale.id,
+                customer: sale.customer.user.name,
+                quantity: sale.quantity,
+                created_at: sale.created_at,
+            };
+        });
+
+        return res;
     }
 
-    async getEventByUser(id: string): Promise<Event[]> {
+    async getEventByUser(id: string) {
         const user = await this.prisma.users.findUnique({
             where: { id },
         });
@@ -97,6 +111,7 @@ export class EventService {
 
         const tickets = await this.prisma.ticket.findMany({
             where: { customer_id: customer.id },
+            include: { event: true },
         });
 
         if (!tickets || tickets.length === 0) {
@@ -115,6 +130,7 @@ export class EventService {
 
         const events = await this.prisma.event.findMany({
             where: { id: { in: uniqueEventIdsAsInt } },
+            include: { tickets: true },
         });
 
         return events;
@@ -191,9 +207,12 @@ export class EventService {
         return deletedEvent;
     }
 
-    async getEventsByOrganizer(organizerId: number): Promise<Event[]> {
+    async getEventsByOrganizer(organizerId: string): Promise<Event[]> {
+        const organizer = await this.prisma.eventOrganizer.findUnique({
+            where: { user_id: organizerId },
+        });
         const events = await this.prisma.event.findMany({
-            where: { organizer_id: +organizerId },
+            where: { organizer_id: organizer.id },
         });
         return events;
     }
@@ -202,12 +221,8 @@ export class EventService {
         const query = {};
 
         if (filterEvent.province) {
-            const province = await this.prisma.province.findFirst({
-                where: { name: filterEvent.province },
-            });
-
             const cities = await this.prisma.city.findMany({
-                where: { province_id: province.id },
+                where: { province_id: +filterEvent.province },
             });
 
             const cityIds = cities.map((city) => city.id);
@@ -217,7 +232,7 @@ export class EventService {
 
         if (filterEvent.city) {
             const city = await this.prisma.city.findFirst({
-                where: { name: filterEvent.city },
+                where: { id: +filterEvent.city },
             });
 
             query['city_id'] = city.id;
@@ -225,7 +240,7 @@ export class EventService {
 
         if (filterEvent.category) {
             const category = await this.prisma.category.findFirst({
-                where: { category_name: filterEvent.category },
+                where: { id: +filterEvent.category },
             });
 
             query['category_id'] = category.id;
@@ -274,8 +289,6 @@ export class EventService {
             throw new NotFoundException(`Event with ID ${eventId} not found`);
         }
 
-        // console.log(approve);
-
         if (approve.verified === true) {
             const approvedEvent = await this.prisma.event.update({
                 where: { id: +eventId },
@@ -287,5 +300,26 @@ export class EventService {
 
         // Return response if approve is false
         return { approved: false, message: 'Event not approved' };
+    }
+
+    async getTicketLeft(eventId: number) {
+        const event = await this.prisma.event.findUnique({
+            where: { id: +eventId },
+        });
+
+        if (!event) {
+            throw new NotFoundException(`Event with ID ${eventId} not found`);
+        }
+
+        const tickets = await this.prisma.ticket.findMany({
+            where: { event_id: +eventId },
+        });
+
+        const ticketLeft = event.ticket_total - tickets.length;
+
+        return {
+            ticket_sold: tickets.length,
+            ticket_left: ticketLeft,
+        };
     }
 }

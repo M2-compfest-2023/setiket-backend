@@ -2,13 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { Ticket } from '@prisma/client';
 
+import { MailingService } from '@/providers/mail/mail.service';
 import { PrismaService } from '@/providers/prisma';
 
 import { CreateTicketDto } from './dtos/create-ticket.dto';
 
 @Injectable()
 export class TicketsService {
-    constructor(private prismaService: PrismaService) {}
+    constructor(
+        private prismaService: PrismaService,
+        private mailService: MailingService,
+    ) {}
 
     async getPurchaseTicketByUserId(id: number): Promise<Ticket[]> {
         const ticketPurchase = await this.prismaService.ticket.findMany({
@@ -72,6 +76,20 @@ export class TicketsService {
                     event_id,
                 },
             });
+
+            const userData = await prisma.users.findUnique({
+                where: {
+                    id: id,
+                },
+            });
+
+            if (ticket) {
+                await this.mailService.ticketPurchased(
+                    userData.name,
+                    userData.email,
+                    event.title,
+                );
+            }
 
             return ticket;
         });
