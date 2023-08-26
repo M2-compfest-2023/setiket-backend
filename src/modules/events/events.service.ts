@@ -285,4 +285,25 @@ export class EventService {
         // Return response if approve is false
         return { approved: false, message: 'Event not approved' };
     }
+
+    async getTicketLeft(eventId: number) {
+        const event = await this.prisma.event.findUnique({
+            where: { id: +eventId },
+        });
+
+        if (!event) {
+            throw new NotFoundException(`Event with ID ${eventId} not found`);
+        }
+
+        const tickets = await this.prisma.ticket.findMany({
+            where: { event_id: +eventId },
+        });
+
+        const ticketLeft = event.ticket_total - tickets.length;
+
+        return {
+            ticket_sold: tickets.length,
+            ticket_left: ticketLeft,
+        };
+    }
 }
