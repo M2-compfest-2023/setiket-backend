@@ -21,9 +21,9 @@ model Users {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  administrators  Administrator[]
-  customers       Customer[]
-  eventOrganizers EventOrganizer[]
+  administrators  Administrator?
+  customers       Customer?
+  eventOrganizers EventOrganizer?
 }
 
 model Administrator {
@@ -118,7 +118,7 @@ model Notify {
   user_id    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  users      Users   @relation(fields: [user_id], references: [id])
+  users      Users    @relation(fields: [user_id], references: [id])
 }
 
 enum UserType {

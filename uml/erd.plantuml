@@ -1,0 +1,174 @@
+@startuml
+
+skinparam linetype ortho
+
+enum UserType {
+  ADMIN
+  CUSTOMER
+  EVENTORGANIZER
+}
+
+class PrismaService extends PrismaClient {
+}
+
+class AuthService {
+    -prismaService: PrismaService
+    -jwtService: JwtService
+    -mailService: MailingService
+    +login(loginDto: UserLoginDto)>
+    +registerCustomer(registerDto: UserRegisterDto)>
+    +registerEo(registerDto: EoRegisterDto)>
+}
+
+
+entity Users {
+  * id: String
+  * name: String
+  * username: String
+  * email: String
+  * password: String
+  * user_type: UserType
+  * notify: Notify[]
+  * created_at: DateTime
+  * updated_at: DateTime
+  * administrators: Administrator[]
+  * customers: Customer[]
+  * eventOrganizers: EventOrganizer[]
+  -prismaService: PrismaService
+  +getAllUsers()
+  +getDetailUser(user_id: string)
+  +getActivities()
+  +getUserActivity(user_id: string)
+  +approveEo(user_id: string, approve?: boolean)
+  +isUserExist(user_id: string)
+
+}
+
+entity Administrator {
+  * id: Int
+  * user_id: String
+  * user: Users
+}
+
+entity Customer {
+  * id: Int
+  * user_id: String
+  * ticket: Ticket[]
+  * user: Users
+}
+
+entity EventOrganizer {
+  * id: Int
+  * user_id: String
+  * organization_name: String
+  * verified: Boolean
+  * created_at: DateTime
+  * updated_at: DateTime
+  * events: Event[]
+  * user: Users
+}
+
+entity Category {
+  * id: Int
+  * category_name: String
+  * created_at: DateTime
+  * updated_at: DateTime
+  * events: Event[]
+  -prisma: PrismaService
+  +getAllCategories()
+  +getEventByCategory(id: number)
+}
+
+entity Event {
+  * id: Int
+  * title: String
+  description: String?
+  * start_date: DateTime
+  * end_date: DateTime
+  * ticket_total: Int
+  * location: String
+  * category_id: Int
+  * organizer_id: Int
+  * verified: Boolean
+  * city_id: Int
+  * price: Int
+  * created_at: DateTime
+  * updated_at: DateTime
+  * tickets: Ticket[]
+  * city: City
+  * organizer: EventOrganizer
+  * category: Category
+  -prisma: PrismaService
+  +getAllEvents()
+  +getEventById(eventId: number)
+  +getEventSales(eventId: number)
+  +getEventByUser(id: string)
+  +createEvent(eventData: CreateEventDto, id: string)
+  +updateEvent(eventId: number, eventData: UpdateEventDto)
+  +deleteEvent(eventId: number)
+  +getEventsByOrganizer(organizerId: number)
+  +filterEvents(filterEvent: FilterEventDto)
+  +approveEvent(eventId: number, approve: ApproveEventDto)
+}
+
+entity Ticket {
+  * id: Int
+  * quantity: Int
+  * customer_id: Int
+  * event_id: Int
+  * created_at: DateTime
+  * updated_at: DateTime
+  * event: Event
+  * customer: Customer
+  -prismaService: PrismaService
+  +getPurchaseTicketByUserId(id: number)
+  +createTicketPurchase(ticketData: CreateTicketDto, id: string)
+  +deleteTicketPurchase(id: number)
+
+}
+
+entity Province {
+  * id: Int
+  * name: String
+  * created_at: DateTime
+  * updated_at: DateTime
+  * city: City[]
+}
+
+class LocationService {
+  -prismaService: PrismaService
+  +getAllProvince()
+  +getAllCity(prov_id?: number)
+}
+
+entity City {
+  * id: Int
+  * province_id: Int
+  * name: String
+  * created_at: DateTime
+  * updated_at: DateTime
+  * Province: Province
+  * event: Event[]
+}
+
+Users ||..|| UserType
+Users ||..|| Administrator
+Users ||..|| Customer
+Users ||..|| EventOrganizer
+Category ||..|{ Event
+EventOrganizer ||..|{ Event
+Customer ||..|{ Ticket
+Province ||..|{ City
+Event }|..|| City
+LocationService --> Province : uses
+Province --> City : has
+City --> Province : belongs to
+PrismaService --> AuthService : <<use>>
+PrismaService --> Category : <<use>>
+PrismaService --> Event : <<use>>
+PrismaService --> Users : <<use>>
+PrismaService --> Ticket : <<use>>
+PrismaService --> LocationService : <<use>>
+
+@enduml
+
