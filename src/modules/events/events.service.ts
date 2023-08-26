@@ -84,7 +84,7 @@ export class EventService {
         return res;
     }
 
-    async getEventByUser(id: string): Promise<Event[]> {
+    async getEventByUser(id: string) {
         const user = await this.prisma.users.findUnique({
             where: { id },
         });
@@ -111,6 +111,7 @@ export class EventService {
 
         const tickets = await this.prisma.ticket.findMany({
             where: { customer_id: customer.id },
+            include: { event: true },
         });
 
         if (!tickets || tickets.length === 0) {
@@ -129,6 +130,7 @@ export class EventService {
 
         const events = await this.prisma.event.findMany({
             where: { id: { in: uniqueEventIdsAsInt } },
+            include: { tickets: true },
         });
 
         return events;
