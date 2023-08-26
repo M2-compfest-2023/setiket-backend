@@ -1,34 +1,33 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsString } from 'class-validator';
+// import { IsDateString, IsString } from 'class-validator';
 
 export class FilterEventDto {
     @ApiPropertyOptional({
         required: false,
     })
-    @IsString()
     province: string;
 
     @ApiPropertyOptional({
         required: false,
     })
-    @IsString()
     city: string;
 
     @ApiPropertyOptional({
         required: false,
     })
-    @IsString()
     category: string;
 
     @ApiPropertyOptional({
         required: false,
+        example: '2021-01-01T00:00:00.000Z',
     })
-    @IsDateString()
+    // @IsDateString()
     start_date: Date;
 
     @ApiPropertyOptional({
         required: false,
+        example: '2021-01-01T00:00:00.000Z',
     })
-    @IsDateString()
+    // @IsDateString()
     end_date: Date;
 }

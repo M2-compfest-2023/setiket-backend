@@ -37,7 +37,7 @@ export class EventController {
         return await this.eventsService.getAllEvents();
     }
 
-    @Get(':id')
+    @Get('/detail/:id')
     @HttpCode(200)
     @ResponseMessage('Event retrieved successfully')
     async getEventById(@Param('id') id: number) {
