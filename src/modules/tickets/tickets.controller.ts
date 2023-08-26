@@ -55,12 +55,12 @@ export class TicketController {
     @ResponseMessage('Success create ticket purchase')
     async createTicketPurchase(
         @Body() ticketData: CreateTicketDto,
-        @Token('id') id: string,
+        @Token('id') data: string,
     ) {
         try {
             const ticket = await this.ticketService.createTicketPurchase(
                 ticketData,
-                id,
+                data,
             );
             return ticket;
         } catch (error) {

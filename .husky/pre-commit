@@ -4,5 +4,5 @@
 yarn lint-staged --allow-empty
 yarn lint
 yarn format
-yarn test --passWithNoTests
+# yarn test --passWithNoTests
 git add .

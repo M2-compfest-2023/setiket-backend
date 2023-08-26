@@ -199,6 +199,7 @@ export class EventService {
     }
 
     async filterEvents(filterEvent: FilterEventDto): Promise<Event[]> {
+        console.log(filterEvent);
         const query = {};
 
         if (filterEvent.province) {
