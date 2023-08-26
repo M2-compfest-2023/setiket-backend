@@ -29,7 +29,16 @@ export class UsersService {
             name: u.name,
             email: u.email,
             user_type: u.user_type,
+            verified: u.eventOrganizers[0],
         }));
+
+        res.map((u) => {
+            if (u.user_type != 'EVENTORGANIZER') {
+                u.verified = {
+                    verified: true,
+                };
+            }
+        });
 
         return res;
     }
