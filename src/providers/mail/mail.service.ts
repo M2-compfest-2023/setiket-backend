@@ -56,4 +56,19 @@ export class MailingService {
             html: html,
         });
     }
+
+    async ticketPurchased(name: string, email: string, eventName: string) {
+        const html = this.generalTemplate({
+            subject: 'Ticket Purchased',
+            name,
+            title: 'Ticket Purchased',
+            message: `You have purchased ticket for ${eventName}`,
+        });
+
+        await this.transporter.sendMail({
+            to: email,
+            subject: 'Ticket Purchased',
+            html: html,
+        });
+    }
 }
