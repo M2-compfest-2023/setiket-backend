@@ -71,6 +71,12 @@ export class AuthService {
             },
         });
 
+        await this.prismaService.customer.create({
+            data: {
+                user_id: newUser.id,
+            },
+        });
+
         return {
             access_token: this.jwtService.sign({
                 username: newUser.username,
