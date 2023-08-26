@@ -65,9 +65,23 @@ export class EventService {
 
         const sales = await this.prisma.ticket.findMany({
             where: { event_id: +event.id },
+            include: {
+                customer: {
+                    include: { user: true },
+                },
+            },
         });
 
-        return sales;
+        const res = sales.map((sale) => {
+            return {
+                id: sale.id,
+                customer: sale.customer.user.name,
+                quantity: sale.quantity,
+                created_at: sale.created_at,
+            };
+        });
+
+        return res;
     }
 
     async getEventByUser(id: string): Promise<Event[]> {
