@@ -199,27 +199,64 @@ export class EventService {
     }
 
     async filterEvents(filterEvent: FilterEventDto): Promise<Event[]> {
-        console.log(filterEvent);
         const query = {};
 
         if (filterEvent.province) {
-            query['province'] = filterEvent.province;
+            const province = await this.prisma.province.findFirst({
+                where: { name: filterEvent.province },
+            });
+
+            const cities = await this.prisma.city.findMany({
+                where: { province_id: province.id },
+            });
+
+            const cityIds = cities.map((city) => city.id);
+
+            query['city_id'] = { in: cityIds };
         }
 
         if (filterEvent.city) {
-            query['city'] = filterEvent.city;
+            const city = await this.prisma.city.findFirst({
+                where: { name: filterEvent.city },
+            });
+
+            query['city_id'] = city.id;
         }
 
         if (filterEvent.category) {
-            query['category'] = filterEvent.category;
+            const category = await this.prisma.category.findFirst({
+                where: { category_name: filterEvent.category },
+            });
+
+            query['category_id'] = category.id;
         }
 
         if (filterEvent.start_date) {
-            query['start_date'] = filterEvent.start_date;
+            const events = await this.prisma.event.findMany({
+                where: {
+                    start_date: {
+                        gte: new Date(filterEvent.start_date),
+                    },
+                },
+            });
+
+            const eventIds = events.map((event) => event.id);
+
+            query['id'] = { in: eventIds };
         }
 
         if (filterEvent.end_date) {
-            query['end_date'] = filterEvent.end_date;
+            const events = await this.prisma.event.findMany({
+                where: {
+                    end_date: {
+                        lte: new Date(filterEvent.end_date),
+                    },
+                },
+            });
+
+            const eventIds = events.map((event) => event.id);
+
+            query['id'] = { in: eventIds };
         }
 
         const events = await this.prisma.event.findMany({
