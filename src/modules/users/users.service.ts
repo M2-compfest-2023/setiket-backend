@@ -14,6 +14,7 @@ export class UsersService {
                 id: true,
                 name: true,
                 email: true,
+                user_type: true,
             },
         });
     }
@@ -28,6 +29,7 @@ export class UsersService {
                 id: true,
                 name: true,
                 email: true,
+                user_type: true,
             },
         });
 
