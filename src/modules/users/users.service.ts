@@ -89,7 +89,7 @@ export class UsersService {
         });
 
         const buyTicketActivity = tickets.map((u) => ({
-            meesage: `${u.customer.user.name} bought ${u.quantity} tickets of ${u.event.title}`,
+            message: `${u.customer.user.name} bought ${u.quantity} tickets of ${u.event.title}`,
             timestamp: u.created_at.toLocaleString(),
         }));
 
