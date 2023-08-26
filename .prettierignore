@@ -5,3 +5,4 @@ yarn.lock
 .prettierrc
 tsconfig.json
 dist
+./src/database/schema.prisma
