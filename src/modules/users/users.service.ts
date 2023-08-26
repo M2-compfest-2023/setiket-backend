@@ -15,6 +15,11 @@ export class UsersService {
                 name: true,
                 email: true,
                 user_type: true,
+                eventOrganizers: {
+                    select: {
+                        verified: true,
+                    },
+                },
             },
         });
 
@@ -24,26 +29,7 @@ export class UsersService {
             name: u.name,
             email: u.email,
             user_type: u.user_type,
-            verified: true,
         }));
-
-        res.map((u) => {
-            if (u.user_type === 'CUSTOMER') {
-                u.verified = true;
-            } else if (u.user_type === 'EVENTORGANIZER') {
-                this.prismaService.eventOrganizer
-                    .findFirst({
-                        where: {
-                            user_id: u.id,
-                        },
-                    })
-                    .then((res) => {
-                        u.verified = res.verified;
-                    });
-            } else if (u.user_type === 'ADMIN') {
-                u.verified = true;
-            }
-        });
 
         return res;
     }
@@ -59,6 +45,11 @@ export class UsersService {
                 name: true,
                 email: true,
                 user_type: true,
+                eventOrganizers: {
+                    select: {
+                        verified: true,
+                    },
+                },
             },
         });
 
@@ -70,23 +61,8 @@ export class UsersService {
             name: user.name,
             email: user.email,
             user_type: user.user_type,
-            verified: true,
+            verified: user.eventOrganizers[0].verified,
         };
-        if (user.user_type === 'CUSTOMER') {
-            resUser.verified = true;
-        } else if (user.user_type === 'EVENTORGANIZER') {
-            this.prismaService.eventOrganizer
-                .findFirst({
-                    where: {
-                        user_id: user.id,
-                    },
-                })
-                .then((res) => {
-                    resUser.verified = res.verified;
-                });
-        } else if (user.user_type === 'ADMIN') {
-            resUser.verified = true;
-        }
 
         return resUser;
     }
