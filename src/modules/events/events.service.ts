@@ -191,9 +191,12 @@ export class EventService {
         return deletedEvent;
     }
 
-    async getEventsByOrganizer(organizerId: number): Promise<Event[]> {
+    async getEventsByOrganizer(organizerId: string): Promise<Event[]> {
+        const organizer = await this.prisma.eventOrganizer.findUnique({
+            where: { user_id: organizerId },
+        });
         const events = await this.prisma.event.findMany({
-            where: { organizer_id: +organizerId },
+            where: { organizer_id: organizer.id },
         });
         return events;
     }
